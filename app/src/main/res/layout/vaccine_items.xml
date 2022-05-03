@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/vaccine_table_row"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:stretchColumns="1,2,3">
+
+    <TableRow>
+
+        <TextView
+            android:id="@+id/vaccine_name"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:layout_column="1"/>
+
+        <TextView
+            android:id="@+id/taken_at"
+            android:layout_width="20dp"
+            android:layout_height="wrap_content"
+            android:text="Due On"
+            android:gravity="center"
+            android:layout_column="2"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/mark_as_btn"
+            android:layout_width="25dp"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:layout_column="3"
+            android:textAllCaps="false"/>
+
+    </TableRow>
+
+</TableLayout>
