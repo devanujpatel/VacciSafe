@@ -10,35 +10,53 @@
         android:id="@+id/vaccisafe_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         android:gravity="center"
         android:text="VacciSafe"
-        android:textSize="40sp"
+        android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/select_profile_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="About"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+    <View
+        android:id="@+id/view2"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:alpha="180"
+        android:background="#C5CAE9"
+        app:layout_constraintEnd_toEndOf="@+id/vaccisafe_title"
+        app:layout_constraintStart_toStartOf="@+id/vaccisafe_title"
         app:layout_constraintTop_toBottomOf="@+id/vaccisafe_title" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/about_btn"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/round_corner_about"
+        android:gravity="center"
+        android:text="About"
+        android:textAllCaps="false"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/view2"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/view2"
+        app:layout_constraintTop_toBottomOf="@+id/view2" />
 
     <Button
         android:id="@+id/add_recipient"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="80dp"
         android:layout_marginTop="24dp"
+        android:layout_marginEnd="80dp"
+        android:background="@drawable/round_corner_about"
+        android:drawableLeft="@drawable/ic_baseline_person_24"
         android:text="Add Recipient"
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/select_profile_tv" />
+        app:layout_constraintTop_toBottomOf="@+id/about_btn" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/profiles_list"
@@ -57,6 +75,8 @@
 
     </androidx.recyclerview.widget.RecyclerView>
 
+    <!--
+    Language choice feature is under developmemt - 3-5-2022
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
@@ -69,5 +89,5 @@
         app:backgroundTint="@color/purple_500"
         app:layout_constraintBottom_toBottomOf="@+id/profiles_list"
         app:layout_constraintEnd_toEndOf="parent" />
-
+        -->
 </androidx.constraintlayout.widget.ConstraintLayout>

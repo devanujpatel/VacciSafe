@@ -10,4 +10,10 @@
         parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@drawable/round_corner</item>
     </style>
+
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+    </style>
+
 </resources>

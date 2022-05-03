@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/round_corner"
+    android:padding="7dp">
+
+    <TextView
+        android:id="@+id/about_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:padding="5dp"
+        android:text="About VacciSafe"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/about_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="5dp"
+        android:padding="5dp"
+        android:text="Welcome to VacciSafe. This app helps you keep track of your (or your children's) Vaccine schedule. Based on the date of birth provided VacciSafe will show past vaccines as 'Taken' and the new future ones as 'Not Taken. You can change the status of a particular vaccine to 'Taken' or 'Not Taken' and VacciSafe will handle the rest. Going forward this app will provide reminder notifications as the due date approaches."
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@id/about_title"
+        app:layout_constraintStart_toStartOf="@id/about_title"
+        app:layout_constraintTop_toTopOf="@id/about_title" />
+
+    <Button
+        android:id="@+id/btn_okay"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="3dp"
+        android:background="@android:color/transparent"
+        android:stateListAnimator="@null"
+        android:text="Okay"
+        android:textAllCaps="false"
+        android:textColor="@android:color/holo_blue_dark"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/about_tv" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
