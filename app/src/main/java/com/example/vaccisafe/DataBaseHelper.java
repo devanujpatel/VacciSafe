@@ -218,7 +218,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     // recipient past the recommended period for vaccination
                     // put vaccine_taken day as today's date
                     // reminder date as null
-                    Log.d(TAG, "makeProfile: case 1");
                     vaccine_values.put("vac_taken_date", today_date.toString());
                 }
                  /*
@@ -227,13 +226,15 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     vaccine_values.put("vac_taken_date", today_date_string);
                 }
                  (vaccine_date.isAfter(today_date))
-                */
+
                 else {
-                    Log.d(TAG, "makeProfile: case 2");
                     vaccine_values.put("reminder_date_year", vaccine_date.getYear());
                     vaccine_values.put("reminder_date_month", vaccine_date.getMonthValue());
                     vaccine_values.put("reminder_date_day", vaccine_date.getDayOfMonth());
-                }
+                }*/
+                vaccine_values.put("reminder_date_year", vaccine_date.getYear());
+                vaccine_values.put("reminder_date_month", vaccine_date.getMonthValue());
+                vaccine_values.put("reminder_date_day", vaccine_date.getDayOfMonth());
 
                 SQLiteDatabase new_db = this.getWritableDatabase();
                 new_db.insert("vaccine_records", null, vaccine_values);
