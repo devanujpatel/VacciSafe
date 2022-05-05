@@ -14,7 +14,7 @@
         <TextView
             android:layout_column="1"
             android:padding="10dp"
-            android:text="Vaccine"
+            android:text="@string/vaccine"
             android:gravity="center"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -22,7 +22,7 @@
         <TextView
             android:layout_column="1"
             android:padding="10dp"
-            android:text="Taken at"
+            android:text="@string/taken_at"
             android:textSize="16sp"
             android:gravity="center"
             android:textStyle="bold" />
@@ -31,7 +31,7 @@
             android:layout_column="1"
             android:padding="10dp"
             android:gravity="center"
-            android:text="Due On"
+            android:text="@string/due_on"
             android:textSize="16sp"
             android:textStyle="bold" />
 

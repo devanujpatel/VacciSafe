@@ -1,3 +1,20 @@
 <resources>
-    <string name="app_name">VacciSafe</string>
+    <string name="app_name" translatable="false">VacciSafe</string>
+    <string name="vaccisafe_title" translatable="false">VacciSafe</string>
+    <string name="about" translatable="false">About</string>
+    <string name="add_recipient" translatable="false">Add Recipient</string>
+    <string name="last_name">Last Name</string>
+    <string name="first_name">First Name</string>
+    <string name="create_new_recipient">Create new Recipient</string>
+    <string name="date_of_birth">Date of Birth</string>
+    <string name="submit">Submit</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="other">Other</string>
+    <string name="vaccine">Vaccine</string>
+    <string name="taken_at">Taken at</string>
+    <string name="due_on">Due On</string>
+    <string name="about_vaccisafe">About VacciSafe</string>
+    <string name="about_vaccisafe_long_string">Welcome to VacciSafe. This app helps you keep track of your (or your children\'s) Vaccine schedule. Based on the date of birth provided, VacciSafe will show past vaccines as \'Taken\' and the new future ones as \'Not Taken. You can change the status of a particular vaccine to \'Taken\' or \'Not Taken\' and VacciSafe will handle the rest. Going forward this app will provide reminder notifications as the due date approaches.</string>
+    <string name="okay">Okay</string>
 </resources>

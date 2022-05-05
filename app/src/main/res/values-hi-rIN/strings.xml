@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">वॅक्सीसेफ</string>
+    <string name="vaccisafe_title" translatable="false">वॅक्सीसेफ</string>
+    <string name="about" translatable="false">बारे में</string>
+    <string name="add_recipient" translatable="false">प्राप्तकर्ता को जोड़ें</string>
+    <string name="last_name">उपनाम</string>
+    <string name="first_name">पहला नाम</string>
+    <string name="submit">प्रस्तुत</string>
+    <string name="date_of_birth">जन्म की तारीख</string>
+    <string name="create_new_recipient">नया प्राप्तकर्ता बनाएं</string>
+    <string name="male">पुरुष</string>
+    <string name="female">महिला</string>
+    <string name="other">अन्य</string>
+    <string name="vaccine">"टीका "</string>
+    <string name="taken_at">" पर लिया"</string>
+    <string name="about_vaccisafe">VacciSafe के बारे में</string>
+    <string name="due_on">" पर कारण"</string>
+    <string name="about_vaccisafe_long_string">VacciSafe में आपका स्वागत है। यह ऐप आपको अपने (या आपके बच्चों के) वैक्सीन शेड्यूल पर नज़र रखने में मदद करता है। प्रदान की गई जन्म तिथि के आधार पर, VacciSafe पिछले टीकों को \'लिया गया\' और नए भविष्य वाले को \'नहीं लिया गया\' के रूप में दिखाएगा। आप किसी विशेष टीके की स्थिति को \'टेकन\' या \'नॉट टेकन\' में बदल सकते हैं और वैक्सीनसेफ बाकी को संभाल लेगा। आगे जाकर यह ऐप नियत तारीख के करीब आते ही रिमाइंडर नोटिफिकेशन प्रदान करेगा।</string>
+    <string name="okay">ठीक</string>
+</resources>
