@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="vaccisafe_title" translatable="false">" વેક્સીસેફ"</string>
+    <string name="app_name" translatable="false">" વેક્સીસેફ"</string>
+    <string name="about" translatable="false">વિશે</string>
+    <string name="add_recipient" translatable="false">પ્રાપ્તકર્તા ઉમેરો</string>
+    <string name="last_name">છેલ્લું નામ</string>
+    <string name="create_new_recipient">" નવા પ્રાપ્તકર્તા બનાવો"</string>
+    <string name="first_name">" પ્રથમ નામ"</string>
+    <string name="date_of_birth">" જન્મ તારીખ"</string>
+    <string name="submit">" સબમિટ કરો"</string>
+    <string name="female">" સ્ત્રી"</string>
+    <string name="male">" પુરુષ"</string>
+    <string name="other">" અન્ય"</string>
+    <string name="taken_at">" ખાતે લેવામાં આવે છે"</string>
+    <string name="vaccine">" રસી"</string>
+    <string name="due_on">બાકી છે</string>
+    <string name="about_vaccisafe">" VacciSafe વિશે"</string>
+    <string name="about_vaccisafe_long_string">VacciSafe માં આપનું સ્વાગત છે. આ એપ્લિકેશન તમને તમારા (અથવા તમારા બાળકોના) રસીના શેડ્યૂલ પર નજર રાખવામાં મદદ કરે છે. પ્રદાન કરેલ જન્મ તારીખના આધારે, VacciSafe ભૂતકાળની રસીઓ \'લેવામાં\' તરીકે અને નવી ભવિષ્યની રસીઓ \'ન લેવાયેલી\' તરીકે બતાવશે. તમે ચોક્કસ રસીની સ્થિતિને \'લેવામાં\' અથવા \'ન લેવાયેલી\' માં બદલી શકો છો અને બાકીની વેક્સીસેફ સંભાળશે. આગળ જતાં આ એપ્લિકેશન નિયત તારીખ નજીક આવતાં રિમાઇન્ડર સૂચનાઓ પ્રદાન કરશે.</string>
+    <string name="okay">બરાબર</string>
+</resources>
