@@ -139,7 +139,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private JobInfo getJobInfo(final int id, final ComponentName name) {
-        final long interval = 30 * 1000; // 15min for now (testing)
+        final long interval = 86400000;
         final JobInfo jobInfo;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

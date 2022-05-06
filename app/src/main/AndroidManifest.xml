@@ -12,7 +12,8 @@
         android:theme="@style/Theme.VacciApp">
         <activity android:name=".VaccineActivity"></activity>
         <activity android:name=".MakeNewProfile" />
-        <activity android:name=".ProfileActivity">
+        <activity android:name=".ProfileActivity"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

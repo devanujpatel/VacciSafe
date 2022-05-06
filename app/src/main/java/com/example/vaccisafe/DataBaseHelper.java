@@ -436,9 +436,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public ArrayList<ReminderModel> getReminders() {
         SQLiteDatabase db = this.getReadableDatabase();
         Date today = new Date();
-        LocalDate today_ld = LocalDate.of(today.getYear() + 1900, today.getMonth() + 1, today.getDay());
-        today_ld.plusDays(2);
-        Log.d(TAG, "getReminders: " + today_ld.toString());
+        LocalDate today_ld = LocalDate.of(today.getYear() + 1900, today.getMonth() + 1, today.getDay() + 1);
+        today_ld = today_ld.plusDays(2);
+        Log.d(TAG, "getReminders: plus 2 date" + today_ld.toString());
         Cursor reminder_cursor = db.rawQuery("SELECT vaccine_fk, recipient_fk, reminder_date_year, reminder_date_month, reminder_date_day FROM vaccine_records WHERE vac_taken_date IS NULL", null);
         Log.d(TAG, "getReminders: " + reminder_cursor.getCount());
         // Cursor reminder_cursor = db.rawQuery("SELECT vaccine_fk, recipient_fk, reminder_date_year, reminder_date_month, reminder_date_day FROM vaccine_records WHERE reminder_date_year=" + 2022 + " AND reminder_date_month = " + 4 + " AND reminder_date_day = " + 3, null);
@@ -451,7 +451,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 Log.d(TAG, "getReminders: " + reminder_date.toString());
                 Log.d(TAG, "getReminders: " + today_ld.toString());
                 if (reminder_date.isBefore(today_ld) || reminder_date.equals(today_ld)) {
-                    reminders.add(new ReminderModel(getVacName(reminder_cursor.getInt(0)), getRec_fname(reminder_cursor.getInt(1)), getRec_fname(reminder_cursor.getInt(1)), reminder_cursor.getInt(0), reminder_cursor.getInt(1)));
+                    reminders.add(new ReminderModel(getVacName(reminder_cursor.getInt(0)), getRec_fname(reminder_cursor.getInt(1)), getRec_fname(reminder_cursor.getInt(1)), reminder_cursor.getInt(0), reminder_cursor.getInt(1), reminder_date));
                 }
             } while (reminder_cursor.moveToNext());
         }
@@ -479,6 +479,24 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return fname;
     }
 
+
+    public String getRec_lname(int pk) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String lname = null;
+
+        Cursor rec_cursor = db.rawQuery("SELECT last_name FROM recipients WHERE recipient_pk = " + pk + ";", null);
+        if (rec_cursor.moveToFirst()) {
+            do {
+                lname = rec_cursor.getString(0);
+            } while (rec_cursor.moveToNext());
+
+        } else {
+            Log.d(TAG, "DEV get_recipients: error");
+        }
+        rec_cursor.close();
+        db.close();
+        return lname;
+    }
     @RequiresApi(api = Build.VERSION_CODES.O)
     public LocalDate getDOB(int pk) {
         SQLiteDatabase db = this.getReadableDatabase();
