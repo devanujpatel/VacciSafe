@@ -432,16 +432,27 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public ArrayList<ReminderModel> getReminders() {
         SQLiteDatabase db = this.getReadableDatabase();
         Date today = new Date();
-        // Cursor reminder_cursor = db.rawQuery("SELECT vaccine_fk, recipient_fk FROM vaccine_records WHERE reminder_date_year = " + (today.getYear() +1900) + " AND reminder_date_month = " + (today.getMonth() + 1) + " AND reminder_date_day = " + today.getDate(), null);
-        Cursor reminder_cursor = db.rawQuery("SELECT vaccine_fk, recipient_fk FROM vaccine_records WHERE reminder_date_year=" + 2022 + " AND reminder_date_month = " + 4 + " AND reminder_date_day = " + 3, null);
+        LocalDate today_ld = LocalDate.of(today.getYear() + 1900, today.getMonth() + 1, today.getDay());
+        today_ld.plusDays(2);
+        Log.d(TAG, "getReminders: " + today_ld.toString());
+        Cursor reminder_cursor = db.rawQuery("SELECT vaccine_fk, recipient_fk, reminder_date_year, reminder_date_month, reminder_date_day FROM vaccine_records WHERE vac_taken_date IS NULL", null);
+        Log.d(TAG, "getReminders: " + reminder_cursor.getCount());
+        // Cursor reminder_cursor = db.rawQuery("SELECT vaccine_fk, recipient_fk, reminder_date_year, reminder_date_month, reminder_date_day FROM vaccine_records WHERE reminder_date_year=" + 2022 + " AND reminder_date_month = " + 4 + " AND reminder_date_day = " + 3, null);
+        // reminder_date_year <= " + (today.getYear() +1900) + " AND reminder_date_month <= " + (today.getMonth() + 1) + " AND reminder_date_day <= " + today.getDate()
         ArrayList<ReminderModel> reminders = new ArrayList<>();
 
         if (reminder_cursor.moveToFirst()) {
             do {
-                reminders.add(new ReminderModel(getVacName(reminder_cursor.getInt(0)), getRec_fname(reminder_cursor.getInt(1)), getRec_fname(reminder_cursor.getInt(1)), reminder_cursor.getInt(0), reminder_cursor.getInt(1)));
+                LocalDate reminder_date = LocalDate.of(reminder_cursor.getInt(2), reminder_cursor.getInt(3), reminder_cursor.getInt(4));
+                Log.d(TAG, "getReminders: " + reminder_date.toString());
+                Log.d(TAG, "getReminders: " + today_ld.toString());
+                if (reminder_date.isBefore(today_ld) || reminder_date.equals(today_ld)) {
+                    reminders.add(new ReminderModel(getVacName(reminder_cursor.getInt(0)), getRec_fname(reminder_cursor.getInt(1)), getRec_fname(reminder_cursor.getInt(1)), reminder_cursor.getInt(0), reminder_cursor.getInt(1)));
+                }
             } while (reminder_cursor.moveToNext());
         }
         Log.e(TAG, "getReminders: " + reminders.size());

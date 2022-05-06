@@ -85,6 +85,7 @@ public class ProfileActivity extends AppCompatActivity {
         */
 
         // look for reminders once every day
+        Log.d(TAG, "Scheduling job!");
         scheduleJob();
 
         make_new_profile_btn = findViewById(R.id.add_recipient);
@@ -121,6 +122,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void scheduleJob() {
+        Log.d(TAG, "Scheduling job! 2");
         final JobScheduler jobScheduler = (JobScheduler) getSystemService(
                 Context.JOB_SCHEDULER_SERVICE);
 
@@ -137,7 +139,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private JobInfo getJobInfo(final int id, final ComponentName name) {
-        final long interval = 24 * 60 * 60 * 1000; // run once every day
+        final long interval = 30 * 1000; // 15min for now (testing)
         final JobInfo jobInfo;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -151,10 +153,4 @@ public class ProfileActivity extends AppCompatActivity {
         }
         return jobInfo;
     }
-
-    public void openDialog() {
-        languageChangeDialog languageChangeDialog = new languageChangeDialog();
-        languageChangeDialog.show(getSupportFragmentManager(), "Language Dialog");
-    }
-
 }

@@ -90,7 +90,7 @@ public class ReminderService extends JobService {
             if (rec_to_rem.get(reminders.get(i).getRec_pk()) == null) {
                 // ArrayList<String> array = new ArrayList<>();
                 //array.add(reminders.get(i).getVaccine_name());
-                content = reminders.get(i).getVaccine_name();
+                content = "->" + reminders.get(i).getVaccine_name();
             } else {
                 //ArrayList<String> array = (ArrayList<String>) rec_to_rem.get(reminders.get(i).getRec_pk());
                 //array.add(reminders.get(i).getVaccine_name());
