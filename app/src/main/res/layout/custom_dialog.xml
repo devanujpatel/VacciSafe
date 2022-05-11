@@ -32,14 +32,12 @@
         app:layout_constraintStart_toStartOf="@id/about_title"
         app:layout_constraintTop_toTopOf="@id/about_title" />
 
-    <Button
+    <TextView
         android:id="@+id/btn_okay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
-        android:stateListAnimator="@null"
         android:text="@string/okay"
-        android:textAllCaps="false"
         android:textColor="@android:color/holo_green_dark"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"

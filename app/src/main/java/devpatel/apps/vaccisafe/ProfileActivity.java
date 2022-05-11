@@ -25,6 +25,7 @@ import java.util.ArrayList;
 
 import hotchemi.android.rate.AppRate;
 import hotchemi.android.rate.OnClickButtonListener;
+import hotchemi.android.rate.StoreType;
 
 import static android.content.ContentValues.TAG;
 
@@ -85,20 +86,24 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         AppRate.with(this)
+                .setStoreType(StoreType.GOOGLEPLAY) //default is Google, other option is Amazon
                 .setInstallDays(0) // default 10, 0 means install day.
-                .setLaunchTimes(0) // default 10
-                .setRemindInterval(2) // default 1
-                .setShowLaterButton(true) // default true
-                .setDebug(false) // default false
+                .setLaunchTimes(2) // default 10 times.
+                .setRemindInterval(2) // default 1 day.
+                .setShowLaterButton(true) // default true.
+                .setDebug(false) // default false.
+                .setCancelable(false) // default false.
                 .setOnClickButtonListener(new OnClickButtonListener() { // callback listener.
                     @Override
                     public void onClickButton(int which) {
-                        open_play_store();
+                        Log.d("Dev Patel HERE HERE", Integer.toString(which));
+                        if (which == -1) {
+                            open_play_store();
+                        }
                     }
                 })
                 .monitor();
 
-        // Show a dialog if meets conditions
         AppRate.showRateDialogIfMeetsConditions(this);
 
         TextView rate_vaccisafe_tv = findViewById(R.id.rate_us);
@@ -108,6 +113,7 @@ public class ProfileActivity extends AppCompatActivity {
                 open_play_store();
             }
         });
+
         displayRecList();
     }
 
