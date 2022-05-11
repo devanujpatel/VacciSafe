@@ -66,7 +66,7 @@
         android:layout_marginStart="80dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="80dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="40dp"
         android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -75,19 +75,17 @@
 
     </androidx.recyclerview.widget.RecyclerView>
 
-    <!--
-    Language choice feature is under developmemt - 3-5-2022
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
+    <TextView
+        android:id="@+id/rate_us"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="16dp"
-        android:layout_marginEnd="12dp"
-        android:contentDescription="Change Language"
-        android:src="@drawable/ic_baseline_language_24"
-        app:backgroundTint="@color/purple_500"
-        app:layout_constraintBottom_toBottomOf="@+id/profiles_list"
-        app:layout_constraintEnd_toEndOf="parent" />
-        -->
+        android:layout_marginBottom="7dp"
+        android:color="@color/gray"
+        android:text="Rate VacciSafe"
+        android:textColor="@color/gray"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,6 @@
-package com.example.vaccisafe;
+package devpatel.apps.vaccisafe;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -22,6 +23,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.play.core.review.ReviewInfo;
+import com.google.android.play.core.review.ReviewManager;
+import com.google.android.play.core.review.ReviewManagerFactory;
+import com.google.android.play.core.tasks.OnCompleteListener;
+import com.google.android.play.core.tasks.OnFailureListener;
+import com.google.android.play.core.tasks.Task;
+
 import java.util.ArrayList;
 
 import static android.content.ContentValues.TAG;
@@ -40,6 +48,33 @@ public class VaccineActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vaccine);
+
+        ReviewManager manager = ReviewManagerFactory.create(VaccineActivity.this);
+        manager.requestReviewFlow().addOnCompleteListener(new OnCompleteListener<ReviewInfo>() {
+            @Override
+            public void onComplete(@NonNull Task<ReviewInfo> task) {
+                if (task.isSuccessful()) {
+                    ReviewInfo reviewInfo = task.getResult();
+                    manager.launchReviewFlow((Activity) VaccineActivity.this, reviewInfo).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(Exception e) {
+                            Toast.makeText(VaccineActivity.this, "Rating Failed", Toast.LENGTH_SHORT).show();
+                        }
+                    }).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Toast.makeText(VaccineActivity.this, "Review Completed, Thank You!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(Exception e) {
+                Toast.makeText(VaccineActivity.this, "In-App Request Failed", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         Intent intent = getIntent();
         RecipientModel rc_model = (RecipientModel) intent.getSerializableExtra("rc_model");

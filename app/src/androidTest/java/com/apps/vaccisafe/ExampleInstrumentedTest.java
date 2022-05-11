@@ -1,4 +1,4 @@
-package com.example.vaccisafe;
+package com.apps.vaccisafe;
 
 import android.content.Context;
 

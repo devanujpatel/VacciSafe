@@ -1,4 +1,4 @@
-package com.example.vaccisafe;
+package devpatel.apps.vaccisafe;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -51,7 +51,7 @@ public class ReminderService extends JobService {
 
     private void makeNotification(String title, String content, int value) {
 
-        Intent click_intent = new Intent(this, ProfileActivity.class);
+        Intent click_intent = new Intent(this, VaccineActivity.class);
         PendingIntent click_pd_intent = PendingIntent.getActivity(this, 1, click_intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)

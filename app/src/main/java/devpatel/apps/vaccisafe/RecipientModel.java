@@ -1,4 +1,4 @@
-package com.example.vaccisafe;
+package devpatel.apps.vaccisafe;
 
 import java.io.Serializable;
 

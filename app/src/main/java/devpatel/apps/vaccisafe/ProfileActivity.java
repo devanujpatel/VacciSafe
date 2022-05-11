@@ -1,4 +1,4 @@
-package com.example.vaccisafe;
+package devpatel.apps.vaccisafe;
 
 import android.app.Dialog;
 import android.app.job.JobInfo;
@@ -6,12 +6,14 @@ import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
@@ -19,9 +21,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import java.util.ArrayList;
+
+import hotchemi.android.rate.AppRate;
+import hotchemi.android.rate.OnClickButtonListener;
 
 import static android.content.ContentValues.TAG;
 
@@ -68,21 +71,6 @@ public class ProfileActivity extends AppCompatActivity {
                 dialog.show();
             }
         });
-        /*
-        Language choice feature is under development - 3-5-2022
-
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openDialog();
-            }
-        });
-
-        this.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        getSupportActionBar().setDisplayShowCustomEnabled(true);
-        getSupportActionBar().setCustomView(R.layout.custom_action_bar);
-        */
 
         // look for reminders once every day
         Log.d(TAG, "Scheduling job!");
@@ -96,7 +84,40 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+        AppRate.with(this)
+                .setInstallDays(0) // default 10, 0 means install day.
+                .setLaunchTimes(0) // default 10
+                .setRemindInterval(2) // default 1
+                .setShowLaterButton(true) // default true
+                .setDebug(false) // default false
+                .setOnClickButtonListener(new OnClickButtonListener() { // callback listener.
+                    @Override
+                    public void onClickButton(int which) {
+                        open_play_store();
+                    }
+                })
+                .monitor();
+
+        // Show a dialog if meets conditions
+        AppRate.showRateDialogIfMeetsConditions(this);
+
+        TextView rate_vaccisafe_tv = findViewById(R.id.rate_us);
+        rate_vaccisafe_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                open_play_store();
+            }
+        });
         displayRecList();
+    }
+
+    public void open_play_store() {
+        final String appPackageName = getPackageName(); // getPackageName() from Context or Activity object
+        try {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+        } catch (android.content.ActivityNotFoundException anfe) {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=devpatel.apps.vaccisafe" + appPackageName)));
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -126,10 +147,10 @@ public class ProfileActivity extends AppCompatActivity {
         final JobScheduler jobScheduler = (JobScheduler) getSystemService(
                 Context.JOB_SCHEDULER_SERVICE);
 
-        // The JobService that we want to run
+// The JobService that we want to run
         final ComponentName name = new ComponentName(this, ReminderService.class);
 
-        // Schedule the job
+// Schedule the job
         final int result = jobScheduler.schedule(getJobInfo(13, name));
 
         // If successfully scheduled, log this thing

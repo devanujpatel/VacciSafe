@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.vaccisafe">
+    package="devpatel.apps.vaccisafe">
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <application
@@ -9,11 +9,15 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
+        android:exported="true"
         android:theme="@style/Theme.VacciApp">
         <activity android:name=".VaccineActivity"></activity>
-        <activity android:name=".MakeNewProfile" />
-        <activity android:name=".ProfileActivity"
-            android:launchMode="singleTop">
+        <activity android:name=".MakeNewProfile"
+            android:exported="true"/>
+        <activity
+            android:name=".ProfileActivity"
+            android:launchMode="singleTop"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,7 +28,7 @@
         <service
             android:name=".ReminderService"
             android:enabled="true"
-            android:exported="false"
+            android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
     </application>

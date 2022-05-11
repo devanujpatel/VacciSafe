@@ -7,7 +7,7 @@ android {
     buildToolsVersion "32.0.0"
 
     defaultConfig {
-        applicationId "com.example.vaccisafe"
+        applicationId "devpatel.apps.vaccisafe"
         minSdkVersion 21
         targetSdkVersion 32
         versionCode 1
@@ -39,7 +39,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     // cardview dependency
     implementation "androidx.cardview:cardview:1.0.0"
-    implementation "com.google.android.material:material:1.5.0"
+    implementation "com.google.android.material:material:1.6.0"
     // to show tabular data
     implementation 'com.evrencoskun.library:tableview:0.8.9.4'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
@@ -50,4 +50,7 @@ dependencies {
     // for notification
     implementation "androidx.core:core:1.7.0"
 
+    // for rate us feature
+    implementation 'com.github.hotchemi:android-rate:1.0.1'
+    implementation 'com.google.android.play:core:1.8.0'
 }
