@@ -20,9 +20,13 @@ import static android.content.ContentValues.TAG;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
     Context context;
+    int rec_pk;
+    int g_dob_year;
+    int g_dob_month;
+    int g_dob_day;
 
     public DataBaseHelper(@Nullable Context context) {
-        super(context, "vaccisafe.db", null, 1);
+        super(context, "vaccisafe.db", null, 2);
         this.context = context;
     }
 
@@ -113,7 +117,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                         " ('Annual Influenza Vaccine', 5, 0, 0,'Annual Influenza Vaccine', 'ALL'),\n" +
                         " ('HPV 1 for Girls', 9, 0, 0,'Human Papillomavirus (HPV) vaccines are vaccines that prevent infection by certain types of human papillomavirus (HPV)', 'F'),\n" +
                         " ('HPV 2 for Girls', 9, 9, 0,'Human Papillomavirus (HPV) vaccines are vaccines that prevent infection by certain types of human papillomavirus (HPV)', 'F'),\n" +
-                        " ('Tdap/ Td', 10, 0, 0,'Tetanus and adult diphtheria (Td) vaccine is a combination of tetanus and diphtheria with lower concentration of diphtheria antigen (d) as recommended for older children and adults', 'ALL');";
+                        " ('Tdap/ Td', 10, 0, 0,'Tetanus and adult diphtheria (Td) vaccine is a combination of tetanus and diphtheria with lower concentration of diphtheria antigen (d) as recommended for older children and adults', 'ALL'),\n" +
+                        "('Tdap/ Td', 16, 0, 0,'Tetanus and adult diphtheria (Td) vaccine is a combination of tetanus and diphtheria with lower concentration of diphtheria antigen (d) as recommended for older children and adults');";
 
         db.execSQL(createRecipientTableStatement);
         db.execSQL(createVaccinesTableStatement);
@@ -121,14 +126,48 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.execSQL(populateVaccinesTable);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
 
+        if (i == 1) {
+            Log.d(TAG, "onUpgrade: calling on upgrade DEV HERE HERE");
+
+            ContentValues values = new ContentValues();
+            values.put("name", "Tdap /Td");
+            values.put("given_at_age_from_year", 16);
+            values.put("given_at_age_from_month", 0);
+            values.put("given_at_age_from_weeks", 0);
+            values.put("details", "Tetanus and adult diphtheria (Td) vaccine is a combination of tetanus and diphtheria with lower concentration of diphtheria antigen (d) as recommended for older children and adults");
+            values.put("gender", "ALL");
+            long vaccine_fk = sqLiteDatabase.insert("vaccines", null, values);
+
+            Cursor recipients_cursor = sqLiteDatabase.rawQuery("SELECT * FROM recipients;", null);
+
+            if (recipients_cursor.moveToFirst()) {
+                do {
+                    rec_pk = recipients_cursor.getInt(0);
+                    g_dob_year = recipients_cursor.getInt(3);
+                    g_dob_month = recipients_cursor.getInt(4);
+                    g_dob_day = recipients_cursor.getInt(5);
+
+                    add_vaccine_record_to_db(16, 0 , 0, (int) vaccine_fk, sqLiteDatabase);
+                } while (recipients_cursor.moveToNext());
+            } else {
+                Log.d(TAG, "DEV get_recipients: error");
+            }
+            recipients_cursor.close();
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public Object[] makeProfile(String first_name, String last_name, int dob_year, int dob_month, int day_dob, String gender) {
         Object[] return_values = new Object[2];
+
+        rec_pk = getRec(first_name, last_name);
+        g_dob_year = dob_year;
+        g_dob_month = dob_month;
+        g_dob_day = day_dob;
 
         if (first_name.equals("") || last_name.equals("")) {
             return_values[0] = "empty name";
@@ -185,60 +224,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         if (vaccine_cursor.moveToFirst()) {
             do {
-                int vac_add_year = vaccine_cursor.getInt(2);
-                int vac_add_month = vaccine_cursor.getInt(3);
-                int vac_add_weeks = vaccine_cursor.getInt(4);
+                add_vaccine_record_to_db(vaccine_cursor.getInt(2), vaccine_cursor.getInt(3), vaccine_cursor.getInt(4), vaccine_cursor.getInt(0), db);
 
-                Log.e(TAG, "makeProfile: " + vac_add_year + vac_add_month + vac_add_weeks);
-
-                // start with the dob and later add the required years, months and days
-                LocalDate vaccine_date = LocalDate.of(dob_year, dob_month, day_dob);
-
-                vaccine_date = vaccine_date.plusYears(vac_add_year);
-                vaccine_date = vaccine_date.plusMonths(vac_add_month);
-                vaccine_date = vaccine_date.plusDays(vac_add_weeks * 7);
-
-                ContentValues vaccine_values = new ContentValues();
-                vaccine_values.put("vaccine_fk", vaccine_cursor.getInt(0));
-                vaccine_values.put("recipient_fk", getRec(first_name, last_name));
-
-                LocalDate today_date = LocalDate.now();
-
-                // to get the formatted today date to enter in database and to show on screen
-                //SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                //Calendar cal = Calendar.getInstance();
-                //Date date = cal.getTime();
-                //String today_date_string = dateFormat.format(date);
-
-                Log.e(TAG, "makeProfile: today date" + today_date.toString());
-                Log.e(TAG, "makeProfile: vaccine date" + vaccine_date.toString());
-
-                //if (today.compareTo(vaccine_date) > 0) {
-                if (vaccine_date.isBefore(today_date) || vaccine_date.equals(today_date)) {
-                    // recipient past the recommended period for vaccination
-                    // put vaccine_taken day as today's date
-                    // reminder date as null
-                    vaccine_values.put("vac_taken_date", today_date.toString());
-                }
-                 /*
-                if (vaccine_date.equals(today_date)) {
-                    Log.d(TAG, "makeProfile: case 1");
-                    vaccine_values.put("vac_taken_date", today_date_string);
-                }
-                 (vaccine_date.isAfter(today_date))
-
-                else {
-                    vaccine_values.put("reminder_date_year", vaccine_date.getYear());
-                    vaccine_values.put("reminder_date_month", vaccine_date.getMonthValue());
-                    vaccine_values.put("reminder_date_day", vaccine_date.getDayOfMonth());
-                }*/
-                vaccine_values.put("reminder_date_year", vaccine_date.getYear());
-                vaccine_values.put("reminder_date_month", vaccine_date.getMonthValue());
-                vaccine_values.put("reminder_date_day", vaccine_date.getDayOfMonth());
-
-                SQLiteDatabase new_db = this.getWritableDatabase();
-                new_db.insert("vaccine_records", null, vaccine_values);
-                new_db.close();
             } while (vaccine_cursor.moveToNext());
         }
         vaccine_cursor.close();
@@ -249,6 +236,35 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         DateTimeFormatter mydateformat = DateTimeFormatter.ofPattern("d/MM/uuuu");
         return_values[1] = new RecipientModel(first_name, last_name, dob.format(mydateformat), (int) success);
         return return_values;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void add_vaccine_record_to_db(int vac_add_year, int vac_add_month, int vac_add_weeks, int vaccine_fk, SQLiteDatabase db) {
+        // start with the dob and later add the required years, months and days
+        LocalDate vaccine_date = LocalDate.of(g_dob_year, g_dob_month, g_dob_day);
+
+        vaccine_date = vaccine_date.plusYears(vac_add_year);
+        vaccine_date = vaccine_date.plusMonths(vac_add_month);
+        vaccine_date = vaccine_date.plusDays(vac_add_weeks * 7);
+
+        ContentValues vaccine_values = new ContentValues();
+        vaccine_values.put("vaccine_fk", vaccine_fk);
+        vaccine_values.put("recipient_fk", rec_pk);
+
+        LocalDate today_date = LocalDate.now();
+
+        //if (today.compareTo(vaccine_date) > 0) {
+        if (vaccine_date.isBefore(today_date) || vaccine_date.equals(today_date)) {
+            // recipient past the recommended period for vaccination
+            // put vaccine_taken day as today's date
+            // reminder date as null
+            vaccine_values.put("vac_taken_date", today_date.toString());
+        }
+        vaccine_values.put("reminder_date_year", vaccine_date.getYear());
+        vaccine_values.put("reminder_date_month", vaccine_date.getMonthValue());
+        vaccine_values.put("reminder_date_day", vaccine_date.getDayOfMonth());
+
+        db.insert("vaccine_records", null, vaccine_values);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -283,20 +299,12 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         Log.d(TAG, "DEV PATEL getVaccineRecords: column count: " + vaccine_cursor.getColumnCount());
         if (vaccine_cursor.moveToFirst()) {
             do {
-
                 String details = getDetails(vaccine_cursor.getInt(0));
 
                 Log.d(TAG, "DEV getVaccineRecords: adding: " + this.getVacName(vaccine_cursor.getInt(0)));
                 String dueOn;
                 if (vaccine_cursor.getString(4) != null) {
                     LocalDate rec_dob = LocalDate.of(Integer.parseInt(vaccine_cursor.getString(2)), Integer.parseInt(vaccine_cursor.getString(3)), Integer.parseInt(vaccine_cursor.getString(4)));
-                    //rec_dob.plusYears(Long.parseLong(vaccine_cursor.getString(2)));
-                    //rec_dob.plusMonths(Long.parseLong(vaccine_cursor.getString(3)));
-                    //rec_dob.plusDays(Long.parseLong(vaccine_cursor.getString(4)));
-                    //DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                    //dueOn = dateFormat.format(rec_dob);
-                    // String text = date.format(mydateformat);
-                    //dueOn = rec_dob.toString();
                     DateTimeFormatter mydateformat = DateTimeFormatter.ofPattern("d/MM/uuuu");
                     dueOn = rec_dob.format(mydateformat);
                 } else {
@@ -417,7 +425,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
         c.close();
         db.close();
-        Log.d(TAG, "DEV getRec: rec pk is " + age);
+        Log.d(TAG, "DEV getAge: " + age);
         return age;
     }
 
@@ -497,6 +505,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.close();
         return lname;
     }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     public LocalDate getDOB(int pk) {
         SQLiteDatabase db = this.getReadableDatabase();
