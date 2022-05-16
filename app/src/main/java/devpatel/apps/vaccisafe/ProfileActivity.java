@@ -176,7 +176,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private JobInfo getJobInfo(final int id, final ComponentName name) {
-        final long interval = 10 * 1000;//86400000;
+        final long interval = 86400000;
         final JobInfo jobInfo;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             jobInfo = new JobInfo.Builder(id, name)
