@@ -118,7 +118,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                         " ('HPV 1 for Girls', 9, 0, 0,'Human Papillomavirus (HPV) vaccines are vaccines that prevent infection by certain types of human papillomavirus (HPV)', 'F'),\n" +
                         " ('HPV 2 for Girls', 9, 9, 0,'Human Papillomavirus (HPV) vaccines are vaccines that prevent infection by certain types of human papillomavirus (HPV)', 'F'),\n" +
                         " ('Tdap/ Td', 10, 0, 0,'Tetanus and adult diphtheria (Td) vaccine is a combination of tetanus and diphtheria with lower concentration of diphtheria antigen (d) as recommended for older children and adults', 'ALL'),\n" +
-                        "('Tdap/ Td', 16, 0, 0,'Tetanus and adult diphtheria (Td) vaccine is a combination of tetanus and diphtheria with lower concentration of diphtheria antigen (d) as recommended for older children and adults');";
+                        " ('Tdap/ Td', 16, 0, 0,'Tetanus and adult diphtheria (Td) vaccine is a combination of tetanus and diphtheria with lower concentration of diphtheria antigen (d) as recommended for older children and adults', 'ALL');";
 
         db.execSQL(createRecipientTableStatement);
         db.execSQL(createVaccinesTableStatement);
@@ -131,8 +131,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
 
         if (i == 1) {
-            Log.d(TAG, "onUpgrade: calling on upgrade DEV HERE HERE");
-
             ContentValues values = new ContentValues();
             values.put("name", "Tdap /Td");
             values.put("given_at_age_from_year", 16);
@@ -220,7 +218,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         } else {
             vaccine_cursor = db.rawQuery("SELECT * FROM vaccines WHERE gender != 'F' ORDER BY given_at_age_from_year ASC, given_at_age_from_month ASC, given_at_age_from_weeks ASC;", null);
         }
-        Log.e(TAG, "makeProfile: " + vaccine_cursor.getCount());
 
         if (vaccine_cursor.moveToFirst()) {
             do {
@@ -296,12 +293,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor vaccine_cursor = db.query("vaccine_records", columns, "recipient_fk=?", new String[]{String.valueOf(pk)}, null, null, "vaccine_fk");
-        Log.d(TAG, "DEV PATEL getVaccineRecords: column count: " + vaccine_cursor.getColumnCount());
+
         if (vaccine_cursor.moveToFirst()) {
             do {
                 String details = getDetails(vaccine_cursor.getInt(0));
 
-                Log.d(TAG, "DEV getVaccineRecords: adding: " + this.getVacName(vaccine_cursor.getInt(0)));
                 String dueOn;
                 if (vaccine_cursor.getString(4) != null) {
                     LocalDate rec_dob = LocalDate.of(Integer.parseInt(vaccine_cursor.getString(2)), Integer.parseInt(vaccine_cursor.getString(3)), Integer.parseInt(vaccine_cursor.getString(4)));
@@ -388,7 +384,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
         c.close();
         db.close();
-        Log.d(TAG, "DEV getRec: rec pk is " + pk);
         return pk;
     }
 
@@ -401,8 +396,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             if (c.getString(0).equals("0") && c.getString(1).equals("0") && c.getString(2).equals("0")) {
                 return "Birth";
             }
-
-            Log.d(TAG, "getAge: " + c.getString(0) + c.getString(1) + c.getString(2));
 
             if (!c.getString(0).equals("0")) {
                 age += c.getString(0);
@@ -425,7 +418,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
         c.close();
         db.close();
-        Log.d(TAG, "DEV getAge: " + age);
         return age;
     }
 
@@ -446,9 +438,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         Date today = new Date();
         LocalDate today_ld = LocalDate.of(today.getYear() + 1900, today.getMonth() + 1, today.getDay() + 1);
         today_ld = today_ld.plusDays(2);
-        Log.d(TAG, "getReminders: plus 2 date" + today_ld.toString());
         Cursor reminder_cursor = db.rawQuery("SELECT vaccine_fk, recipient_fk, reminder_date_year, reminder_date_month, reminder_date_day FROM vaccine_records WHERE vac_taken_date IS NULL", null);
-        Log.d(TAG, "getReminders: " + reminder_cursor.getCount());
         // Cursor reminder_cursor = db.rawQuery("SELECT vaccine_fk, recipient_fk, reminder_date_year, reminder_date_month, reminder_date_day FROM vaccine_records WHERE reminder_date_year=" + 2022 + " AND reminder_date_month = " + 4 + " AND reminder_date_day = " + 3, null);
         // reminder_date_year <= " + (today.getYear() +1900) + " AND reminder_date_month <= " + (today.getMonth() + 1) + " AND reminder_date_day <= " + today.getDate()
         ArrayList<ReminderModel> reminders = new ArrayList<>();
@@ -456,14 +446,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         if (reminder_cursor.moveToFirst()) {
             do {
                 LocalDate reminder_date = LocalDate.of(reminder_cursor.getInt(2), reminder_cursor.getInt(3), reminder_cursor.getInt(4));
-                Log.d(TAG, "getReminders: " + reminder_date.toString());
-                Log.d(TAG, "getReminders: " + today_ld.toString());
                 if (reminder_date.isBefore(today_ld) || reminder_date.equals(today_ld)) {
                     reminders.add(new ReminderModel(getVacName(reminder_cursor.getInt(0)), getRec_fname(reminder_cursor.getInt(1)), getRec_fname(reminder_cursor.getInt(1)), reminder_cursor.getInt(0), reminder_cursor.getInt(1), reminder_date));
                 }
             } while (reminder_cursor.moveToNext());
         }
-        Log.e(TAG, "getReminders: " + reminders.size());
         reminder_cursor.close();
         db.close();
         return reminders;
@@ -533,39 +520,3 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 }
-
-/*
-public void viewVaccines() {
-    SQLiteDatabase db = this.getReadableDatabase();
-    String query = "SELECT * FROM vaccines ORDER BY given_at_age_from_year ASC, given_at_age_from_month ASC, given_at_age_from_weeks ASC;";
-    Cursor cursor = db.rawQuery(query, null);
-    if (cursor.moveToFirst()) {
-        do {
-            Log.d(TAG, "DEV viewVaccines: " + cursor.getString(1));
-        } while (cursor.moveToNext());
-
-    } else {
-        Log.d(TAG, "DEV viewVaccines: no data in vaccines table!");
-    }
-    cursor.close();
-    db.close();
-}
-
-
-    public String getRec_lname(int pk) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        String lname = null;
-        Cursor rec_cursor = db.rawQuery("SELECT last_name FROM recipients WHERE recipient_pk = " + pk + "''", null);
-        if (rec_cursor.moveToFirst()) {
-            do {
-                lname = rec_cursor.getString(0);
-            } while (rec_cursor.moveToNext());
-        } else {
-            Log.d(TAG, "DEV get_recipients: error");
-        }
-        rec_cursor.close();
-        db.close();
-        return lname;
-    }
-
-*/

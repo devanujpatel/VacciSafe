@@ -98,28 +98,23 @@ public class ReminderService extends JobService {
                 // ArrayList<String> array = new ArrayList<>();
                 //array.add(reminders.get(i).getVaccine_name());
                 content = "->" + reminders.get(i).getVaccine_name();
-                content += " - Due on: " + reminders.get(i).getreminder_date();
+                content += getString(R.string.due_on_with_spaces) + reminders.get(i).getreminder_date();
             } else {
                 //ArrayList<String> array = (ArrayList<String>) rec_to_rem.get(reminders.get(i).getRec_pk());
                 //array.add(reminders.get(i).getVaccine_name());
                 content = (String) rec_to_rem.get(reminders.get(i).getRec_pk());
                 content += "->" + reminders.get(i).getVaccine_name();
-                content += " - Due on: " + reminders.get(i).getreminder_date();
+                content += getString(R.string.due_on_with_spaces) + reminders.get(i).getreminder_date();
 
             }
             content += "\n";
             rec_to_rem.put(reminders.get(i).getRec_pk(), content);
         }
 
-        Log.d(TAG, "sendReminders: " + rec_to_rem.toString());
-
         for (int value : rec_to_rem.keySet()) {
             StringBuilder notification_content = new StringBuilder();
             notification_content.append(rec_to_rem.get(value));
-            makeNotification("VacciSafe Reminder for " + db.getRec_fname(value) + " " + db.getRec_lname(value), notification_content.toString(), value);
+            makeNotification(getString(R.string.vaccisafe_reminder_for) + db.getRec_fname(value) + " " + db.getRec_lname(value), notification_content.toString(), value);
         }
-
-        // "Vaccine Reminder for " + db.getRec_fname(value)\n "Your following vaccine(s) are due:\n" + rec_to_rem.get(value)
-
     }
 }

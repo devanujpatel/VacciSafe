@@ -22,4 +22,14 @@
     <string name="rate_dialog_ok">Rate VacciSafe Now</string>
     <string name="rate_dialog_cancel">Remind Me Later</string>
     <string name="rate_dialog_no">No, Thanks</string>
+    <string name="provide_first_name">Please provide a first name</string>
+    <string name="provide_last_name">Please provide a last name</string>
+    <string name="provide_gender">Please provide a gender</string>
+    <string name="provide_dob">Please provide a Date of Birth</string>
+    <string name="error_occured">An error occurred</string>
+    <string name="name_already_registered">This name is already registered</string>
+    <string name="provide_valid_name">Please provide a valid name</string>
+    <string name="due_on_with_spaces">" - Due on: "</string>
+    <string name="vaccisafe_reminder_for">"VacciSafe Reminder for "</string>
+
 </resources>

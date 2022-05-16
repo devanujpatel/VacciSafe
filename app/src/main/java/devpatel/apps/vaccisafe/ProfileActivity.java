@@ -60,7 +60,7 @@ public class ProfileActivity extends AppCompatActivity {
                 }
                 dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation; //Setting the animations to dialog
 
-                Button Okay = dialog.findViewById(R.id.btn_okay);
+                TextView Okay = dialog.findViewById(R.id.btn_okay);
 
                 Okay.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -74,7 +74,6 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         // look for reminders once every day
-        Log.d(TAG, "Scheduling job!");
         scheduleJob();
 
         make_new_profile_btn = findViewById(R.id.add_recipient);
@@ -96,7 +95,6 @@ public class ProfileActivity extends AppCompatActivity {
                 .setOnClickButtonListener(new OnClickButtonListener() { // callback listener.
                     @Override
                     public void onClickButton(int which) {
-                        Log.d("Dev Patel HERE HERE", Integer.toString(which));
                         if (which == -1) {
                             open_play_store();
                         }
@@ -111,6 +109,20 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 open_play_store();
+            }
+        });
+
+        TextView share_tv = findViewById(R.id.share);
+        share_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "Download VacciSafe: an all-in-one solution to manage vaccine schedules.\n https://play.google.com/store/apps/details?id=devpatel.apps.vaccisafe");
+                sendIntent.setType("text/plain");
+
+                Intent shareIntent = Intent.createChooser(sendIntent, null);
+                startActivity(shareIntent);
             }
         });
 
@@ -149,7 +161,6 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void scheduleJob() {
-        Log.d(TAG, "Scheduling job! 2");
         final JobScheduler jobScheduler = (JobScheduler) getSystemService(
                 Context.JOB_SCHEDULER_SERVICE);
 

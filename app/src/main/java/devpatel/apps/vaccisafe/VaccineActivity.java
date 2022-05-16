@@ -8,15 +8,12 @@ import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -56,14 +53,8 @@ public class VaccineActivity extends AppCompatActivity {
         TextView name = view.findViewById(R.id.name_plus_dob_app_title_plus_bar);
         db = new DataBaseHelper(this);
         name.setText(" - " + first_name + " (" + rc_dob + ")");
-
-        Log.d(TAG, "DEV onCreate: " + first_name + last_name);
         rec_pk = db.getRec(first_name, last_name);
         ArrayList<VaccineModel> vaccines = db.getVaccineRecords(rec_pk);
-        for (int i = 0; i < vaccines.size(); i++) {
-            Log.d(TAG, "onCreate: " + vaccines.get(i).getName());
-        }
-
         RecyclerView recyclerView = findViewById(R.id.vaccines_recycler_view);
         VaccineRecyclerAdapter adapter = new VaccineRecyclerAdapter(vaccines);
         recyclerView.setHasFixedSize(true);
@@ -88,7 +79,6 @@ public class VaccineActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 db.delete_rec(rec_pk);
-                Log.d(TAG, "onMenuItemClick: clicked menu item for deleting");
                 Intent myIntent = new Intent(VaccineActivity.this, ProfileActivity.class);
                 startActivity(myIntent);
                 return true;

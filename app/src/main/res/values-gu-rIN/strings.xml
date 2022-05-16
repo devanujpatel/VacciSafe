@@ -18,4 +18,18 @@
     <string name="about_vaccisafe">" VacciSafe વિશે"</string>
     <string name="about_vaccisafe_long_string">VacciSafe માં આપનું સ્વાગત છે. આ એપ્લિકેશન તમને તમારા (અથવા તમારા બાળકોના) રસીના શેડ્યૂલ પર નજર રાખવામાં મદદ કરે છે. પ્રદાન કરેલ જન્મ તારીખના આધારે, VacciSafe ભૂતકાળની રસીઓ \'લેવામાં\' તરીકે અને નવી ભવિષ્યની રસીઓ \'ન લેવાયેલી\' તરીકે બતાવશે. તમે ચોક્કસ રસીની સ્થિતિને \'લેવામાં\' અથવા \'ન લેવાયેલી\' માં બદલી શકો છો અને બાકીની વેક્સીસેફ સંભાળશે. આગળ જતાં આ એપ્લિકેશન નિયત તારીખ નજીક આવતાં રિમાઇન્ડર સૂચનાઓ પ્રદાન કરશે.</string>
     <string name="okay">બરાબર</string>
+    <string name="rate_dialog_title">VacciSafe ને રેટ કરો</string>
+    <string name="rate_dialog_message">કૃપા કરીને અમને Google Play Store પર રેટ કરો. તે એક મિનિટથી વધુ સમય લેશે નહીં! તમારા સમર્થન બદલ આભાર.</string>
+    <string name="rate_dialog_ok">VacciSafe ને હવે રેટ કરો</string>
+    <string name="rate_dialog_cancel">મને પછી યાદ કરાવ</string>
+    <string name="rate_dialog_no">ના આભાર</string>
+    <string name="provide_first_name">કૃપા કરીને પ્રથમ નામ આપો</string>
+    <string name="provide_last_name">"કૃપા કરીને છેલ્લું નામ આપો "</string>
+    <string name="provide_gender">" કૃપા કરીને લિંગ પ્રદાન કરો"</string>
+    <string name="provide_dob">કૃપા કરીને જન્મ તારીખ આપો</string>
+    <string name="error_occured">એક ભૂલ આવી</string>
+    <string name="name_already_registered">આ નામ પહેલેથી જ નોંધાયેલ છે</string>
+    <string name="provide_valid_name">" કૃપા કરીને માન્ય નામ આપો"</string>
+    <string name="due_on_with_spaces">" - બાકી છે: "</string>
+    <string name="vaccisafe_reminder_for">"માટે VacciSafe રીમાઇન્ડર "</string>
 </resources>

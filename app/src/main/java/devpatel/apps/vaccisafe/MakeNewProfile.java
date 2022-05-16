@@ -61,13 +61,13 @@ public class MakeNewProfile extends AppCompatActivity implements DatePickerDialo
                 }
 
                 if (rec_first_name.equals("")) {
-                    Toast.makeText(MakeNewProfile.this, "Please provide a first name", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MakeNewProfile.this, getString(R.string.provide_first_name), Toast.LENGTH_SHORT).show();
                 } else if (rec_last_name.equals("")) {
-                    Toast.makeText(MakeNewProfile.this, "Please provide a last name", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MakeNewProfile.this, getString(R.string.provide_last_name), Toast.LENGTH_SHORT).show();
                 } else if (gender_not_provided) {
-                    Toast.makeText(MakeNewProfile.this, "Please provide a gender", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MakeNewProfile.this, getString(R.string.provide_gender), Toast.LENGTH_SHORT).show();
                 } else if (year_dob == 0 || day_dob == 0 || month_dob == 0) {
-                    Toast.makeText(MakeNewProfile.this, "Please provide a Date of Birth", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MakeNewProfile.this, getString(R.string.provide_dob), Toast.LENGTH_SHORT).show();
                 } else {
                     Object[] response_rc_model_combo = db.makeProfile(rec_first_name, rec_last_name, year_dob, month_dob, day_dob, rec_gender);
                     String response = (String) response_rc_model_combo[0];
@@ -79,11 +79,11 @@ public class MakeNewProfile extends AppCompatActivity implements DatePickerDialo
                         startActivity(myIntent);
 
                     } else if ("error".equals(response)) {
-                        Toast.makeText(MakeNewProfile.this, "An error occurred", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MakeNewProfile.this, getString(R.string.error_occured), Toast.LENGTH_SHORT).show();
                     } else if ("duplicate name".equals(response)) {
-                        Toast.makeText(MakeNewProfile.this, "This name is already registered.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(MakeNewProfile.this, getString(R.string.name_already_registered), Toast.LENGTH_LONG).show();
                     } else if ("empty name".equals(response)) {
-                        Toast.makeText(MakeNewProfile.this, "Please provide a valid name.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MakeNewProfile.this, getString(R.string.provide_valid_name), Toast.LENGTH_SHORT).show();
                     }
                 }
             }

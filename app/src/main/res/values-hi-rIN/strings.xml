@@ -18,4 +18,18 @@
     <string name="due_on">" पर कारण"</string>
     <string name="about_vaccisafe_long_string">VacciSafe में आपका स्वागत है। यह ऐप आपको अपने (या आपके बच्चों के) वैक्सीन शेड्यूल पर नज़र रखने में मदद करता है। प्रदान की गई जन्म तिथि के आधार पर, VacciSafe पिछले टीकों को \'लिया गया\' और नए भविष्य वाले को \'नहीं लिया गया\' के रूप में दिखाएगा। आप किसी विशेष टीके की स्थिति को \'टेकन\' या \'नॉट टेकन\' में बदल सकते हैं और वैक्सीनसेफ बाकी को संभाल लेगा। आगे जाकर यह ऐप नियत तारीख के करीब आते ही रिमाइंडर नोटिफिकेशन प्रदान करेगा।</string>
     <string name="okay">ठीक</string>
+    <string name="rate_dialog_title">VacciSafe को रेट करें</string>
+    <string name="rate_dialog_message">कृपया हमें Google Play Store पर रेट करें। इसमें एक मिनट से ज्यादा नहीं लगेगा! आपके समर्थन के लिए धन्यवाद।</string>
+    <string name="rate_dialog_ok">VacciSafe को अभी रेट करें</string>
+    <string name="rate_dialog_cancel">मुझे बाद में याद दिलाना</string>
+    <string name="rate_dialog_no">जी नहीं, धन्यवाद</string>
+    <string name="provide_first_name">कृपया पहला नाम दें</string>
+    <string name="provide_last_name">कृपया एक अंतिम नाम प्रदान करें</string>
+    <string name="provide_gender">कृपया एक लिंग प्रदान करें</string>
+    <string name="error_occured">" एक त्रुटि पाई गई"</string>
+    <string name="provide_dob">" कृपया जन्मतिथि प्रदान करें"</string>
+    <string name="name_already_registered">" यह नाम पहले से पंजीकृत है"</string>
+    <string name="provide_valid_name">" कृपया कोई मान्य नाम दें."</string>
+    <string name="due_on_with_spaces">" - पर कारण: "</string>
+    <string name="vaccisafe_reminder_for">"के लिए VacciSafe अनुस्मारक "</string>
 </resources>
