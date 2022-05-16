@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
@@ -149,7 +150,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     g_dob_month = recipients_cursor.getInt(4);
                     g_dob_day = recipients_cursor.getInt(5);
 
-                    add_vaccine_record_to_db(16, 0 , 0, (int) vaccine_fk, sqLiteDatabase);
+                    add_vaccine_record_to_db(16, 0, 0, (int) vaccine_fk, sqLiteDatabase);
+
                 } while (recipients_cursor.moveToNext());
             } else {
                 Log.d(TAG, "DEV get_recipients: error");
@@ -162,7 +164,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public Object[] makeProfile(String first_name, String last_name, int dob_year, int dob_month, int day_dob, String gender) {
         Object[] return_values = new Object[2];
 
-        rec_pk = getRec(first_name, last_name);
         g_dob_year = dob_year;
         g_dob_month = dob_month;
         g_dob_day = day_dob;
@@ -211,6 +212,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             return return_values;
         }
 
+        rec_pk = getRec(first_name, last_name, db);
+
         Cursor vaccine_cursor;
         // get all vaccines data
         if (gender.equals("Female")) {
@@ -222,7 +225,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         if (vaccine_cursor.moveToFirst()) {
             do {
                 add_vaccine_record_to_db(vaccine_cursor.getInt(2), vaccine_cursor.getInt(3), vaccine_cursor.getInt(4), vaccine_cursor.getInt(0), db);
-
             } while (vaccine_cursor.moveToNext());
         }
         vaccine_cursor.close();
@@ -264,67 +266,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.insert("vaccine_records", null, vaccine_values);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public ArrayList<RecipientModel> get_recipients() {
-        ArrayList<RecipientModel> recipients = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor rec_cursor = db.rawQuery("SELECT first_name, last_name, year_dob, month_dob, day_dob, recipient_pk FROM recipients;", null);
-        if (rec_cursor.moveToFirst()) {
-            do {
-                LocalDate dob = LocalDate.of(Integer.parseInt(rec_cursor.getString(2)), Integer.parseInt(rec_cursor.getString(3)), Integer.parseInt(rec_cursor.getString(4)));
-                DateTimeFormatter mydateformat = DateTimeFormatter.ofPattern("d/MM/uuuu");
-                RecipientModel recipientModel = new RecipientModel(rec_cursor.getString(0), rec_cursor.getString(1), dob.format(mydateformat), rec_cursor.getInt(5));
-                recipients.add(recipientModel);
-            } while (rec_cursor.moveToNext());
-
-        } else {
-            Log.d(TAG, "DEV get_recipients: error");
-        }
-        rec_cursor.close();
-        db.close();
-        return recipients;
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public ArrayList<VaccineModel> getVaccineRecords(int pk) {
-        ArrayList<VaccineModel> vaccines = new ArrayList<>();
-        String[] columns = {"vaccine_fk, vac_taken_date", "reminder_date_year", "reminder_date_month", "reminder_date_day"};
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor vaccine_cursor = db.query("vaccine_records", columns, "recipient_fk=?", new String[]{String.valueOf(pk)}, null, null, "vaccine_fk");
-
-        if (vaccine_cursor.moveToFirst()) {
-            do {
-                String details = getDetails(vaccine_cursor.getInt(0));
-
-                String dueOn;
-                if (vaccine_cursor.getString(4) != null) {
-                    LocalDate rec_dob = LocalDate.of(Integer.parseInt(vaccine_cursor.getString(2)), Integer.parseInt(vaccine_cursor.getString(3)), Integer.parseInt(vaccine_cursor.getString(4)));
-                    DateTimeFormatter mydateformat = DateTimeFormatter.ofPattern("d/MM/uuuu");
-                    dueOn = rec_dob.format(mydateformat);
-                } else {
-                    dueOn = getRecDob(pk);
-                }
-                VaccineModel vaccineModel = new VaccineModel(this.getVacName(vaccine_cursor.getInt(0)), vaccine_cursor.getString(1), this.getAge(vaccine_cursor.getInt(0)), vaccine_cursor.getInt(0), this.context, dueOn, details);
-                vaccines.add(vaccineModel);
-            } while (vaccine_cursor.moveToNext());
-
-        } else {
-            // would be empty though
-            Log.d(TAG, "DEV getVaccineRecords: error!");
-            vaccines.add(new VaccineModel("Error", "Error", "error", -1, this.context, "error", "error"));
-            vaccine_cursor.close();
-            db.close();
-            return vaccines;
-        }
-        vaccine_cursor.close();
-        db.close();
-        return vaccines;
-    }
-
-    private String getDetails(int pk) {
-        SQLiteDatabase db = this.getReadableDatabase();
+    private String getDetails(int pk, SQLiteDatabase db) {
+        // SQLiteDatabase db = this.getReadableDatabase();
         Cursor details_cursor = db.rawQuery("SELECT details FROM vaccines WHERE vaccine_pk = " + pk, null);
         String details = null;
         if (details_cursor.moveToFirst()) {
@@ -333,18 +276,17 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             } while (details_cursor.moveToNext());
         }
         details_cursor.close();
-        db.close();
+        //db.close();
         return details;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private String getRecDob(int pk) {
-        SQLiteDatabase db = this.getReadableDatabase();
+    private String getRecDob(int pk, SQLiteDatabase db) {
+        // SQLiteDatabase db = this.getReadableDatabase();
         Cursor dob_cursor = db.rawQuery("SELECT year_dob, month_dob, day_dob FROM recipients WHERE recipient_pk = " + pk, null);
         String dob_string = null;
         if (dob_cursor.moveToFirst()) {
             do {
-                // TODO: change here
                 DateTimeFormatter mydateformat = DateTimeFormatter.ofPattern("d/MM/uuuu");
                 LocalDate rec_dob = LocalDate.of(Integer.parseInt(dob_cursor.getString(0)), Integer.parseInt(dob_cursor.getString(1)), Integer.parseInt(dob_cursor.getString(2)));
                 dob_string = rec_dob.format(mydateformat);
@@ -352,12 +294,12 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             } while (dob_cursor.moveToNext());
         }
         dob_cursor.close();
-        db.close();
+        //db.close();
         return dob_string;
     }
 
-    private String getVacName(int vac_pk) {
-        SQLiteDatabase db = this.getReadableDatabase();
+    private String getVacName(int vac_pk, SQLiteDatabase db) {
+        // SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT name FROM vaccines WHERE vaccine_pk = ?", new String[]{String.valueOf(vac_pk)});
         String name = null;
         if (cursor.moveToFirst()) {
@@ -369,12 +311,12 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             name = "error at getVacName";
         }
         cursor.close();
-        db.close();
+        //db.close();
         return name;
     }
 
-    public int getRec(String first_name, String last_name) {
-        SQLiteDatabase db = this.getReadableDatabase();
+    public int getRec(String first_name, String last_name, SQLiteDatabase db) {
+        // SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery("SELECT recipient_pk FROM recipients WHERE first_name = '" + first_name + "' AND last_name = '" + last_name + "';", null);
         int pk;
         if (c.moveToFirst()) {
@@ -383,13 +325,95 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             pk = -1;
         }
         c.close();
-        db.close();
+        //db.close();
         return pk;
     }
 
-    public String getAge(int id) {
-        String age = "";
+    public void setTakenAt(String taken_at, String vaccine_fk) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("vac_taken_date ", taken_at);
+
+        db.update("vaccine_records", values, String.format("%s = ?", "vaccine_fk"),
+                new String[]{vaccine_fk});
+        db.close();
+    }
+
+    public String getRec_fname(int pk, SQLiteDatabase db) {
+        // SQLiteDatabase db = this.getReadableDatabase();
+        String fname = null;
+
+        Cursor rec_cursor = db.rawQuery("SELECT first_name FROM recipients WHERE recipient_pk = " + pk + ";", null);
+        if (rec_cursor.moveToFirst()) {
+            do {
+                fname = rec_cursor.getString(0);
+            } while (rec_cursor.moveToNext());
+
+        } else {
+            Log.d(TAG, "DEV get_recipients: error");
+        }
+        rec_cursor.close();
+        //db.close();
+        return fname;
+    }
+
+    public String getRec_lname(int pk, SQLiteDatabase db) {
+        // SQLiteDatabase db = this.getReadableDatabase();
+        String lname = null;
+
+        Cursor rec_cursor = db.rawQuery("SELECT last_name FROM recipients WHERE recipient_pk = " + pk + ";", null);
+        if (rec_cursor.moveToFirst()) {
+            do {
+                lname = rec_cursor.getString(0);
+            } while (rec_cursor.moveToNext());
+
+        } else {
+            Log.d(TAG, "DEV get_recipients: error");
+        }
+        rec_cursor.close();
+        //db.close();
+        return lname;
+    }
+
+    public void delete_rec(int pk) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("vaccine_records", "recipient_fk=" + pk, null);
+        db.delete("recipients", "recipient_pk = " + pk, null);
+        db.close();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public ArrayList<ReminderModel> getReminders() {
         SQLiteDatabase db = this.getReadableDatabase();
+        Date today = new Date();
+        //LocalDate today_ld = LocalDate.of(today.getYear() + 1900, today.getMonth() + 1, today.getDay() + 1);
+        LocalDate today_ld = today.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        today_ld = today_ld.plusDays(2);
+        Log.d(TAG, "getReminders: " + today_ld.toString());
+        Cursor reminder_cursor = db.rawQuery("SELECT vaccine_fk, recipient_fk, reminder_date_year, reminder_date_month, reminder_date_day FROM vaccine_records WHERE vac_taken_date IS NULL", null);
+        ArrayList<ReminderModel> reminders = new ArrayList<>();
+        Log.d(TAG, "getReminders: " + reminder_cursor.getCount());
+        if (reminder_cursor.moveToFirst()) {
+            do {
+                LocalDate reminder_date = LocalDate.of(reminder_cursor.getInt(2), reminder_cursor.getInt(3), reminder_cursor.getInt(4));
+                if (reminder_date.isBefore(today_ld)) {
+                    Log.d(TAG, "getReminders: adding one");
+                    reminders.add(new ReminderModel(getVacName(reminder_cursor.getInt(0), db), getRec_fname(reminder_cursor.getInt(1), db), getRec_lname(reminder_cursor.getInt(1), db), reminder_cursor.getInt(0), reminder_cursor.getInt(1), reminder_date));
+                } else if (reminder_date.equals(today_ld)) {
+                    Log.d(TAG, "getReminders: adding one");
+                    reminders.add(new ReminderModel(getVacName(reminder_cursor.getInt(0), db), getRec_fname(reminder_cursor.getInt(1), db), getRec_lname(reminder_cursor.getInt(1), db), reminder_cursor.getInt(0), reminder_cursor.getInt(1), reminder_date));
+                }
+            } while (reminder_cursor.moveToNext());
+        }
+        reminder_cursor.close();
+        db.close();
+        return reminders;
+    }
+
+    public String getAge(int id, SQLiteDatabase db) {
+        String age = "";
+        // SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery("SELECT given_at_age_from_year, given_at_age_from_month, given_at_age_from_weeks FROM vaccines WHERE vaccine_pk = '" + String.valueOf(id) + "';", null);
         if (c.moveToFirst()) {
 
@@ -417,92 +441,59 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             age = "error";
         }
         c.close();
-        db.close();
+        // db.close();
         return age;
     }
 
-    public void setTakenAt(String taken_at, String vaccine_fk) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put("vac_taken_date ", taken_at);
-
-        db.update("vaccine_records", values, String.format("%s = ?", "vaccine_fk"),
-                new String[]{vaccine_fk});
-        db.close();
-    }
-
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public ArrayList<ReminderModel> getReminders() {
+    public ArrayList<VaccineModel> getVaccineRecords(int pk) {
+        ArrayList<VaccineModel> vaccines = new ArrayList<>();
+        String[] columns = {"vaccine_fk, vac_taken_date", "reminder_date_year", "reminder_date_month", "reminder_date_day"};
         SQLiteDatabase db = this.getReadableDatabase();
-        Date today = new Date();
-        LocalDate today_ld = LocalDate.of(today.getYear() + 1900, today.getMonth() + 1, today.getDay() + 1);
-        today_ld = today_ld.plusDays(2);
-        Cursor reminder_cursor = db.rawQuery("SELECT vaccine_fk, recipient_fk, reminder_date_year, reminder_date_month, reminder_date_day FROM vaccine_records WHERE vac_taken_date IS NULL", null);
-        // Cursor reminder_cursor = db.rawQuery("SELECT vaccine_fk, recipient_fk, reminder_date_year, reminder_date_month, reminder_date_day FROM vaccine_records WHERE reminder_date_year=" + 2022 + " AND reminder_date_month = " + 4 + " AND reminder_date_day = " + 3, null);
-        // reminder_date_year <= " + (today.getYear() +1900) + " AND reminder_date_month <= " + (today.getMonth() + 1) + " AND reminder_date_day <= " + today.getDate()
-        ArrayList<ReminderModel> reminders = new ArrayList<>();
 
-        if (reminder_cursor.moveToFirst()) {
+        Cursor vaccine_cursor = db.query("vaccine_records", columns, "recipient_fk=?", new String[]{String.valueOf(pk)}, null, null, "vaccine_fk");
+
+        if (vaccine_cursor.moveToFirst()) {
             do {
-                LocalDate reminder_date = LocalDate.of(reminder_cursor.getInt(2), reminder_cursor.getInt(3), reminder_cursor.getInt(4));
-                if (reminder_date.isBefore(today_ld) || reminder_date.equals(today_ld)) {
-                    reminders.add(new ReminderModel(getVacName(reminder_cursor.getInt(0)), getRec_fname(reminder_cursor.getInt(1)), getRec_fname(reminder_cursor.getInt(1)), reminder_cursor.getInt(0), reminder_cursor.getInt(1), reminder_date));
+                String details = getDetails(vaccine_cursor.getInt(0), db);
+
+                String dueOn;
+                if (vaccine_cursor.getString(4) != null) {
+                    LocalDate rec_dob = LocalDate.of(Integer.parseInt(vaccine_cursor.getString(2)), Integer.parseInt(vaccine_cursor.getString(3)), Integer.parseInt(vaccine_cursor.getString(4)));
+                    DateTimeFormatter mydateformat = DateTimeFormatter.ofPattern("d/MM/uuuu");
+                    dueOn = rec_dob.format(mydateformat);
+                } else {
+                    dueOn = getRecDob(pk, db);
                 }
-            } while (reminder_cursor.moveToNext());
-        }
-        reminder_cursor.close();
-        db.close();
-        return reminders;
-    }
-
-    public String getRec_fname(int pk) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        String fname = null;
-
-        Cursor rec_cursor = db.rawQuery("SELECT first_name FROM recipients WHERE recipient_pk = " + pk + ";", null);
-        if (rec_cursor.moveToFirst()) {
-            do {
-                fname = rec_cursor.getString(0);
-            } while (rec_cursor.moveToNext());
+                VaccineModel vaccineModel = new VaccineModel(this.getVacName(vaccine_cursor.getInt(0), db), vaccine_cursor.getString(1), this.getAge(vaccine_cursor.getInt(0), db), vaccine_cursor.getInt(0), this.context, dueOn, details);
+                vaccines.add(vaccineModel);
+            } while (vaccine_cursor.moveToNext());
 
         } else {
-            Log.d(TAG, "DEV get_recipients: error");
+            // would be empty though
+            Log.d(TAG, "DEV getVaccineRecords: error!");
+            vaccines.add(new VaccineModel("Error", "Error", "error", -1, this.context, "error", "error"));
+            vaccine_cursor.close();
+            db.close();
+            return vaccines;
         }
-        rec_cursor.close();
+        vaccine_cursor.close();
         db.close();
-        return fname;
-    }
-
-
-    public String getRec_lname(int pk) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        String lname = null;
-
-        Cursor rec_cursor = db.rawQuery("SELECT last_name FROM recipients WHERE recipient_pk = " + pk + ";", null);
-        if (rec_cursor.moveToFirst()) {
-            do {
-                lname = rec_cursor.getString(0);
-            } while (rec_cursor.moveToNext());
-
-        } else {
-            Log.d(TAG, "DEV get_recipients: error");
-        }
-        rec_cursor.close();
-        db.close();
-        return lname;
+        return vaccines;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public LocalDate getDOB(int pk) {
+    public ArrayList<RecipientModel> get_recipients() {
+        ArrayList<RecipientModel> recipients = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
-        LocalDate rec_dob = null;
-
-        Cursor rec_cursor = db.rawQuery("SELECT year_dob, month_dob, day_dob FROM recipients WHERE recipient_pk = " + pk + ";", null);
+        Cursor rec_cursor = db.rawQuery("SELECT first_name, last_name, year_dob, month_dob, day_dob, recipient_pk FROM recipients;", null);
         if (rec_cursor.moveToFirst()) {
             do {
-                rec_dob = LocalDate.of(rec_cursor.getInt(0), rec_cursor.getInt(1), rec_cursor.getInt(2));
+                LocalDate dob = LocalDate.of(Integer.parseInt(rec_cursor.getString(2)), Integer.parseInt(rec_cursor.getString(3)), Integer.parseInt(rec_cursor.getString(4)));
+                DateTimeFormatter mydateformat = DateTimeFormatter.ofPattern("d/MM/uuuu");
+                RecipientModel recipientModel = new RecipientModel(rec_cursor.getString(0), rec_cursor.getString(1), dob.format(mydateformat), rec_cursor.getInt(5));
+                recipients.add(recipientModel);
             } while (rec_cursor.moveToNext());
 
         } else {
@@ -510,13 +501,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
         rec_cursor.close();
         db.close();
-        return rec_dob;
-    }
-
-    public void delete_rec(int pk) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete("vaccine_records", "recipient_fk=" + pk, null);
-        db.delete("recipients", "recipient_pk = " + pk, null);
-        db.close();
+        return recipients;
     }
 }

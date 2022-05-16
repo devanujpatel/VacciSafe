@@ -53,7 +53,7 @@ public class VaccineActivity extends AppCompatActivity {
         TextView name = view.findViewById(R.id.name_plus_dob_app_title_plus_bar);
         db = new DataBaseHelper(this);
         name.setText(" - " + first_name + " (" + rc_dob + ")");
-        rec_pk = db.getRec(first_name, last_name);
+        rec_pk = db.getRec(first_name, last_name, db.getReadableDatabase());
         ArrayList<VaccineModel> vaccines = db.getVaccineRecords(rec_pk);
         RecyclerView recyclerView = findViewById(R.id.vaccines_recycler_view);
         VaccineRecyclerAdapter adapter = new VaccineRecyclerAdapter(vaccines);

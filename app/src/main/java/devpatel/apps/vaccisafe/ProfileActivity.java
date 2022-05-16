@@ -42,7 +42,6 @@ public class ProfileActivity extends AppCompatActivity {
         this.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setCustomView(R.layout.custom_action_bar);
-        View view = getSupportActionBar().getCustomView();
 
         Button about_btn = findViewById(R.id.about_btn);
         about_btn.getBackground().setAlpha(170);
@@ -164,10 +163,10 @@ public class ProfileActivity extends AppCompatActivity {
         final JobScheduler jobScheduler = (JobScheduler) getSystemService(
                 Context.JOB_SCHEDULER_SERVICE);
 
-// The JobService that we want to run
+        // The JobService that we want to run
         final ComponentName name = new ComponentName(this, ReminderService.class);
 
-// Schedule the job
+        // Schedule the job
         final int result = jobScheduler.schedule(getJobInfo(13, name));
 
         // If successfully scheduled, log this thing
@@ -177,9 +176,8 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private JobInfo getJobInfo(final int id, final ComponentName name) {
-        final long interval = 86400000;
+        final long interval = 10 * 1000;//86400000;
         final JobInfo jobInfo;
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             jobInfo = new JobInfo.Builder(id, name)
                     .setMinimumLatency(interval)

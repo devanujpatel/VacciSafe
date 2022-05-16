@@ -20,6 +20,14 @@ public class ReminderModel {
         this.reminder_date = reminder_date;
     }
 
+    public String getRec_fname() {
+        return rec_fname;
+    }
+
+    public String getRec_lname() {
+        return rec_lname;
+    }
+
     public String getVaccine_name() {
         return vaccine_name;
     }

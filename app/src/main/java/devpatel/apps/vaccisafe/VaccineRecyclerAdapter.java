@@ -104,7 +104,6 @@ public class VaccineRecyclerAdapter extends RecyclerView.Adapter<VaccineRecycler
 
                         mark_as_btn.setText("Taken");
                         mark_as_btn.setBackgroundColor(Color.parseColor("#4caf50"));
-                        //dueOn.setText("-->");
                     }
                 }
             });

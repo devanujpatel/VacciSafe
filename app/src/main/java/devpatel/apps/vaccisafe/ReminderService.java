@@ -83,38 +83,32 @@ public class ReminderService extends JobService {
         }
     }
 
-
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void sendReminders() {
         // make calls from database and run the logic as done before
         DataBaseHelper db = new DataBaseHelper(this);
         ArrayList<ReminderModel> reminders = db.getReminders();
-
+        Log.d(TAG, "sendReminders: " + reminders.size());
         HashMap<Integer, String> rec_to_rem = new HashMap<Integer, String>();
+        HashMap<Integer, String> rec_to_name = new HashMap<Integer, String>();
 
         for (int i = 0; i < reminders.size(); i++) {
             String content;
             if (rec_to_rem.get(reminders.get(i).getRec_pk()) == null) {
-                // ArrayList<String> array = new ArrayList<>();
-                //array.add(reminders.get(i).getVaccine_name());
                 content = "->" + reminders.get(i).getVaccine_name();
-                content += getString(R.string.due_on_with_spaces) + reminders.get(i).getreminder_date();
+                rec_to_name.put(reminders.get(i).getRec_pk(), reminders.get(i).getRec_fname() + " " + reminders.get(i).getRec_lname());
             } else {
-                //ArrayList<String> array = (ArrayList<String>) rec_to_rem.get(reminders.get(i).getRec_pk());
-                //array.add(reminders.get(i).getVaccine_name());
                 content = (String) rec_to_rem.get(reminders.get(i).getRec_pk());
                 content += "->" + reminders.get(i).getVaccine_name();
-                content += getString(R.string.due_on_with_spaces) + reminders.get(i).getreminder_date();
-
             }
+            content += getString(R.string.due_on_with_spaces) + reminders.get(i).getreminder_date();
             content += "\n";
             rec_to_rem.put(reminders.get(i).getRec_pk(), content);
         }
 
         for (int value : rec_to_rem.keySet()) {
-            StringBuilder notification_content = new StringBuilder();
-            notification_content.append(rec_to_rem.get(value));
-            makeNotification(getString(R.string.vaccisafe_reminder_for) + db.getRec_fname(value) + " " + db.getRec_lname(value), notification_content.toString(), value);
+            makeNotification(getString(R.string.vaccisafe_reminder_for) + rec_to_name.get(value), rec_to_rem.get(value), value);
         }
+
     }
 }
