@@ -2,6 +2,7 @@ package devpatel.apps.vaccisafe;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -53,7 +54,9 @@ public class VaccineActivity extends AppCompatActivity {
         TextView name = view.findViewById(R.id.name_plus_dob_app_title_plus_bar);
         db = new DataBaseHelper(this);
         name.setText(" - " + first_name + " (" + rc_dob + ")");
-        rec_pk = db.getRec(first_name, last_name, db.getReadableDatabase());
+        SQLiteDatabase sqlite = db.getReadableDatabase();
+        rec_pk = db.getRec(first_name, last_name, sqlite);
+        sqlite.close();
         ArrayList<VaccineModel> vaccines = db.getVaccineRecords(rec_pk);
         RecyclerView recyclerView = findViewById(R.id.vaccines_recycler_view);
         VaccineRecyclerAdapter adapter = new VaccineRecyclerAdapter(vaccines);
