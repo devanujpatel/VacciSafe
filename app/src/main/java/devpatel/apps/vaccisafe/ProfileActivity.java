@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
@@ -39,6 +38,18 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        boolean show_battery_optimize = true;
+
+        SharedPreferences sharedPreferences = getSharedPreferences("First Run", MODE_PRIVATE);
+        String alarm_stat = sharedPreferences.getString("first run Status", "first run");
+
+        if (alarm_stat.equals("first run")) {
+            show_battery_optimize = false;
+            SharedPreferences.Editor myEdit = sharedPreferences.edit();
+            myEdit.putString("first run Status", "not first run");
+            myEdit.apply();
+        }
 
         this.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
@@ -128,38 +139,37 @@ public class ProfileActivity extends AppCompatActivity {
 
         PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);
 
-        if (!pm.isIgnoringBatteryOptimizations(getPackageName())) {
-            Toast.makeText(this, "Open settings page", Toast.LENGTH_SHORT).show();
-            Dialog dialog = new Dialog(ProfileActivity.this);
-            dialog.setContentView(R.layout.custom_open_battery_optimization_settings_dialog);
-            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            dialog.setCancelable(false);
-            dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.round_corner));
-            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation; //Setting the animations to dialog
+        if (show_battery_optimize) {
+            if (!pm.isIgnoringBatteryOptimizations(getPackageName())) {
+                Dialog dialog = new Dialog(ProfileActivity.this);
+                dialog.setContentView(R.layout.custom_open_battery_optimization_settings_dialog);
+                dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                dialog.setCancelable(false);
+                dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.round_corner));
+                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation; //Setting the animations to dialog
 
-            Button open_settings = dialog.findViewById(R.id.open_settings);
+                Button open_settings = dialog.findViewById(R.id.open_settings);
 
-            open_settings.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent myIntent = new Intent();
-                    myIntent.setAction(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
-                    startActivity(myIntent);
-                }
-            });
+                open_settings.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent myIntent = new Intent();
+                        myIntent.setAction(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
+                        startActivity(myIntent);
+                    }
+                });
 
-            TextView Okay = dialog.findViewById(R.id.btn_okay);
+                TextView Okay = dialog.findViewById(R.id.btn_okay);
 
-            Okay.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialog.dismiss();
-                }
-            });
+                Okay.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
 
-            dialog.show();
-
-
+                dialog.show();
+            }
         }
 
         startAlarm();
@@ -199,7 +209,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void startAlarm() {
         SharedPreferences sharedPreferences = getSharedPreferences("Alarm Status Shared Pref", MODE_PRIVATE);
-        String alarm_stat = sharedPreferences.getString("Alarm Status", "Not yet set");
+        String alarm_stat = sharedPreferences.getString("alarm status", "Not yet set");
 
         if (alarm_stat.equals("Not yet set")) {
 

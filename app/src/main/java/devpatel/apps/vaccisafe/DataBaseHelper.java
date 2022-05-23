@@ -217,9 +217,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         Cursor vaccine_cursor;
         // get all vaccines data
         if (gender.equals("Female")) {
-            vaccine_cursor = db.rawQuery("SELECT * FROM vaccines ORDER BY given_at_age_from_year ASC, given_at_age_from_month ASC, given_at_age_from_weeks ASC;", null);
+            vaccine_cursor = db.rawQuery("SELECT * FROM vaccines ORDER BY vaccine_pk;", null);
+                    //given_at_age_from_year ASC, given_at_age_from_month ASC, given_at_age_from_weeks ASC;", null);
         } else {
-            vaccine_cursor = db.rawQuery("SELECT * FROM vaccines WHERE gender != 'F' ORDER BY given_at_age_from_year ASC, given_at_age_from_month ASC, given_at_age_from_weeks ASC;", null);
+            vaccine_cursor = db.rawQuery("SELECT * FROM vaccines WHERE gender != 'F' ORDER BY vaccine_pk;", null);
+                    //ORDER BY given_at_age_from_year ASC, given_at_age_from_month ASC, given_at_age_from_weeks ASC;", null);
         }
 
         if (vaccine_cursor.moveToFirst()) {

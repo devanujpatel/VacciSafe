@@ -2,13 +2,14 @@ package devpatel.apps.vaccisafe;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.InputFilter;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -36,6 +37,37 @@ public class MakeNewProfile extends AppCompatActivity implements DatePickerDialo
 
         first_name_et = findViewById(R.id.first_name_edit);
         first_name_et.requestFocus();
+        last_name_et = findViewById(R.id.last_name_edit);
+
+        InputFilter filter = new InputFilter() {
+            @Override
+            public CharSequence filter(CharSequence source, int start, int end,
+                                       Spanned dest, int dstart, int dend) {
+
+                if (source instanceof SpannableStringBuilder) {
+                    SpannableStringBuilder sourceAsSpannableBuilder = (SpannableStringBuilder) source;
+                    for (int i = end - 1; i >= start; i--) {
+                        char currentChar = source.charAt(i);
+                        if (!Character.isLetterOrDigit(currentChar) && !Character.isSpaceChar(currentChar)) {
+                            sourceAsSpannableBuilder.delete(i, i + 1);
+                        }
+                    }
+                    return source;
+                } else {
+                    StringBuilder filteredStringBuilder = new StringBuilder();
+                    for (int i = start; i < end; i++) {
+                        char currentChar = source.charAt(i);
+                        if (Character.isLetterOrDigit(currentChar) || Character.isSpaceChar(currentChar)) {
+                            filteredStringBuilder.append(currentChar);
+                        }
+                    }
+                    return filteredStringBuilder.toString();
+                }
+            }
+        };
+
+        first_name_et.setFilters(new InputFilter[]{filter});
+        last_name_et.setFilters(new InputFilter[]{filter});
 
         this.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setDisplayShowCustomEnabled(true);

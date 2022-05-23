@@ -52,7 +52,4 @@ dependencies {
     // for rate us feature
     implementation 'com.github.hotchemi:android-rate:1.0.1'
 
-    // WorkManager
-    implementation "androidx.work:work-runtime:2.7.1"
-
 }

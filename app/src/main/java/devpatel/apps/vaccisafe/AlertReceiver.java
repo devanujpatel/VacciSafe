@@ -26,7 +26,7 @@ public class AlertReceiver extends BroadcastReceiver {
     private void makeNotification(String title, String content, int value, Context my_this) {
 
         Intent click_intent = new Intent(my_this, VaccineActivity.class);
-        PendingIntent click_pd_intent = PendingIntent.getActivity(my_this, 1, click_intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent click_pd_intent = PendingIntent.getActivity(my_this, 2, click_intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Notification notification = new NotificationCompat.Builder(my_this, "VacciSafe Notification Channel")
                 .setSmallIcon(R.drawable.logo)

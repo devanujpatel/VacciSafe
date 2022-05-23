@@ -8,51 +8,50 @@
     android:padding="7dp">
 
     <TextView
-        android:id="@+id/about_title"
+        android:id="@+id/title_regarding_notifications"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:gravity="center_horizontal"
         android:padding="5dp"
-        android:text="@string/about_vaccisafe"
-        android:textSize="24sp"
+        android:text="@string/vaccisafe_notification"
+        android:textSize="21sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/about_tv"
+        android:id="@+id/instructions_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="35dp"
         android:layout_marginEnd="5dp"
         android:padding="5dp"
-        android:text="@string/battery_optimization_instructions"
+        android:text="According to latest Android Guidelines, in order to receive timely notifications you need to disable battery optimization for VacciSafe. To do so:\n\n(1) Click on the button below. It will take you to the appropriate settings page.\n(2) Click on all apps. By default, the \'Not optimized\' filter is selected. Tap on it and change it to \'all apps\' (this should be somewhere on the top of the screen.)\n(3) Find and tap on VacciSafe (You may start searching from the bottom since the list is ordered alphabetically)\n(4)Make sure that for VacciSafe, the \'Not optimized\' option is selected.\n\nOnce done, you would start receiving your vaccine notifications at 9am whenever the due date approaches."
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="@id/about_title"
-        app:layout_constraintStart_toStartOf="@id/about_title"
-        app:layout_constraintTop_toTopOf="@id/about_title" />
+        app:layout_constraintEnd_toEndOf="@id/title_regarding_notifications"
+        app:layout_constraintStart_toStartOf="@id/title_regarding_notifications"
+        app:layout_constraintTop_toTopOf="@id/title_regarding_notifications" />
 
     <Button
         android:id="@+id/open_settings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Open Battery Optimizations Page"
+        android:text="@string/open_battery_optimizations_page"
         android:textAllCaps="false"
-        app:layout_constraintEnd_toEndOf="@id/about_title"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@id/about_title"
-        app:layout_constraintTop_toBottomOf="@id/about_tv" />
+        app:layout_constraintEnd_toEndOf="@id/title_regarding_notifications"
+        app:layout_constraintStart_toStartOf="@id/title_regarding_notifications"
+        app:layout_constraintTop_toBottomOf="@id/instructions_tv" />
 
     <TextView
         android:id="@+id/btn_okay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="4dp"
+        android:layout_marginEnd="6dp"
         android:background="@android:color/transparent"
         android:text="@string/okay"
         android:textColor="@color/secondaryLightColor"
-        android:textSize="18sp"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/open_settings" />
 

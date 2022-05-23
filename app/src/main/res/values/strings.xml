@@ -15,10 +15,10 @@
     <string name="taken_at">Taken at</string>
     <string name="due_on">Due On</string>
     <string name="about_vaccisafe">About VacciSafe</string>
-    <string name="about_vaccisafe_long_string">Welcome to VacciSafe. This app helps you keep track of your (or your children\'s) Vaccine schedule. Based on the date of birth provided, VacciSafe will show past vaccines as \'Taken\' and the new future ones as \'Not Taken. You can change the status of a particular vaccine to \'Taken\' or \'Not Taken\' and VacciSafe will handle the rest. Going forward this app will provide reminder notifications as the due date approaches.</string>
+    <string name="about_vaccisafe_long_string">Welcome to VacciSafe. This app helps you keep track of your (or your children"s) Vaccine schedule. Based on the date of birth provided, VacciSafe will show past vaccines as "Taken" and the new future ones as "Not Taken. You can change the status of a particular vaccine to "Taken" or "Not Taken" and VacciSafe will handle the rest. Going forward this app will provide reminder notifications as the due date approaches.</string>
     <string name="okay">Okay</string>
     <string name="rate_dialog_title">Rate VacciSafe</string>
-    <string name="rate_dialog_message">Please rate us on Google Play Store. It won\'t take more than a minute! Thanks for your support.</string>
+    <string name="rate_dialog_message">Please rate us on Google Play Store. It won"t take more than a minute! Thanks for your support.</string>
     <string name="rate_dialog_ok">Rate VacciSafe Now</string>
     <string name="rate_dialog_cancel">Remind Me Later</string>
     <string name="rate_dialog_no">No, Thanks</string>
@@ -32,6 +32,15 @@
     <string name="due_on_with_spaces">" - Due on: "</string>
     <string name="vaccisafe_reminder_for">"VacciSafe Reminder for "</string>
     <string name="taken">Taken</string>
-    <string name="battery_optimization_instructions">Fill this. TODO</string>
+    <string name="battery_optimization_instructions">According to latest Android Guidelines, in order to receive timely notifications you need to disable battery optimization for VacciSafe. To do so:
+        <br>  (1) Click on the button below. It will take you to the appropriate settings page.</br>
+        <br>  (2) Click on all apps. By default, the "Not optimized" filter is selected. Tap on it and change it to "all apps" (this should be somewhere on the top of the screen.)</br>
+        <br>  (3) Find and tap on VacciSafe (You may start searching from the bottom since the list is ordered alphabetically)</br>
+        <br>  (4)Make sure that for VacciSafe, the "Not optimized" option is selected.</br>
+        <br></br><br>       Once done, you would start receiving your vaccine notifications at 9am whenever the due date approaches.</br>
+    </string>
+    <string name="share_this_app">Share this app</string>
+    <string name="open_battery_optimizations_page">Open Battery Optimizations Page</string>
+    <string name="vaccisafe_notification">Regarding Notifications</string>
 
 </resources>

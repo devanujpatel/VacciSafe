@@ -8,7 +8,7 @@
     android:padding="7dp">
 
     <TextView
-        android:id="@+id/about_title"
+        android:id="@+id/title_regarding_notifications"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/about_tv"
+        android:id="@+id/instructions_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="35dp"
@@ -29,9 +29,9 @@
         android:padding="5dp"
         android:text="@string/about_vaccisafe_long_string"
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="@id/about_title"
-        app:layout_constraintStart_toStartOf="@id/about_title"
-        app:layout_constraintTop_toTopOf="@id/about_title" />
+        app:layout_constraintEnd_toEndOf="@id/title_regarding_notifications"
+        app:layout_constraintStart_toStartOf="@id/title_regarding_notifications"
+        app:layout_constraintTop_toTopOf="@id/title_regarding_notifications" />
 
     <TextView
         android:id="@+id/btn_okay"
@@ -43,6 +43,6 @@
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/about_tv" />
+        app:layout_constraintTop_toBottomOf="@+id/instructions_tv" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
