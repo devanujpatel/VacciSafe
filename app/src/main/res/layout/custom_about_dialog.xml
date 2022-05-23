@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/round_corner"
+    android:padding="7dp">
+
+    <TextView
+        android:id="@+id/about_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:gravity="center_horizontal"
+        android:padding="5dp"
+        android:text="@string/about_vaccisafe"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/about_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="5dp"
+        android:padding="5dp"
+        android:text="@string/about_vaccisafe_long_string"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@id/about_title"
+        app:layout_constraintStart_toStartOf="@id/about_title"
+        app:layout_constraintTop_toTopOf="@id/about_title" />
+
+    <TextView
+        android:id="@+id/btn_okay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:text="@string/okay"
+        android:textColor="@color/secondaryLightColor"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/about_tv" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

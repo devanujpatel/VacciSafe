@@ -1,19 +1,21 @@
 package devpatel.apps.vaccisafe;
 
+import android.app.AlarmManager;
 import android.app.Dialog;
-import android.app.job.JobInfo;
-import android.app.job.JobScheduler;
-import android.content.ComponentName;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.PowerManager;
+import android.provider.Settings;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
@@ -22,12 +24,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import hotchemi.android.rate.AppRate;
 import hotchemi.android.rate.OnClickButtonListener;
 import hotchemi.android.rate.StoreType;
-
-import static android.content.ContentValues.TAG;
 
 public class ProfileActivity extends AppCompatActivity {
     Button make_new_profile_btn;
@@ -51,7 +52,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                 //Create the Dialog here
                 Dialog dialog = new Dialog(ProfileActivity.this);
-                dialog.setContentView(R.layout.custom_dialog);
+                dialog.setContentView(R.layout.custom_about_dialog);
                 dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 dialog.setCancelable(false); //Optional
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -73,7 +74,7 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         // look for reminders once every day
-        scheduleJob();
+        // scheduleJob();
 
         make_new_profile_btn = findViewById(R.id.add_recipient);
         make_new_profile_btn.setOnClickListener(new Button.OnClickListener() {
@@ -125,6 +126,43 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+        PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);
+
+        if (!pm.isIgnoringBatteryOptimizations(getPackageName())) {
+            Toast.makeText(this, "Open settings page", Toast.LENGTH_SHORT).show();
+            Dialog dialog = new Dialog(ProfileActivity.this);
+            dialog.setContentView(R.layout.custom_open_battery_optimization_settings_dialog);
+            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            dialog.setCancelable(false);
+            dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.round_corner));
+            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation; //Setting the animations to dialog
+
+            Button open_settings = dialog.findViewById(R.id.open_settings);
+
+            open_settings.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent myIntent = new Intent();
+                    myIntent.setAction(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
+                    startActivity(myIntent);
+                }
+            });
+
+            TextView Okay = dialog.findViewById(R.id.btn_okay);
+
+            Okay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+
+            dialog.show();
+
+
+        }
+
+        startAlarm();
         displayRecList();
     }
 
@@ -159,6 +197,41 @@ public class ProfileActivity extends AppCompatActivity {
         profiles_rv.setAdapter(recAdapter);
     }
 
+    private void startAlarm() {
+        SharedPreferences sharedPreferences = getSharedPreferences("Alarm Status Shared Pref", MODE_PRIVATE);
+        String alarm_stat = sharedPreferences.getString("Alarm Status", "Not yet set");
+
+        if (alarm_stat.equals("Not yet set")) {
+
+            Calendar calendar = Calendar.getInstance();
+
+            calendar.set(Calendar.HOUR_OF_DAY, 9);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+
+            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            Intent intent = new Intent(this, AlertReceiver.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
+
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                    AlarmManager.INTERVAL_DAY, pendingIntent);
+
+            SharedPreferences.Editor myEdit = sharedPreferences.edit();
+            myEdit.putString("alarm status", "alarm set");
+            myEdit.apply();
+        }
+    }
+
+    /*
+
+        private void cancelAlarm() {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlertReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
+
+        alarmManager.cancel(pendingIntent);
+    }
+
     private void scheduleJob() {
         final JobScheduler jobScheduler = (JobScheduler) getSystemService(
                 Context.JOB_SCHEDULER_SERVICE);
@@ -188,5 +261,5 @@ public class ProfileActivity extends AppCompatActivity {
                     .build();
         }
         return jobInfo;
-    }
+    }*/
 }

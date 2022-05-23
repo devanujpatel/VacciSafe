@@ -13,7 +13,6 @@
         android:layout_marginBottom="5dp"
         android:gravity="center"
         android:text="Vaccine Name Here"
-        android:textColor="@color/gray"
         android:textSize="27sp" />
 
     <View
@@ -27,7 +26,6 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="Vaccine Details Here"
-        android:textColor="@color/gray"
         android:textSize="22sp" />
 
 </LinearLayout>

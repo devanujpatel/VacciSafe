@@ -97,8 +97,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                         " ('PCV 3', 0, 3, 2,'Pneumococcal conjugate vaccine is a pneumococcal vaccine and a conjugate vaccine used to protect infants, young children, and adults against disease caused by the bacterium Streptococcus pneumoniae (pneumococcus)', 'ALL'),\n" +
                         " ('Rota-3', 0, 3, 2,'Rotavirus vaccine is a vaccine used to protect against rotavirus infections, which are the leading cause of severe diarrhea among young children', 'ALL'),\n" +
                         " ('Influenza-1', 0, 6, 0,'Influenza vaccines, also known as flu jabs or flu shots, are vaccines that protect against infection by influenza viruses', 'ALL'),\n" +
+                        " ('Typhoid Conjugate (TCV)', 0, 6, 0,'Vaccine that prevents typhoid fever', 'ALL'),\n" +
                         " ('Influenza-2', 0, 7, 0,'Influenza vaccines, also known as flu jabs or flu shots, are vaccines that protect against infection by influenza viruses', 'ALL'),\n" +
-                        " ('Typhoid Conjugate Vaccine', 0, 6, 0,'Vaccine that prevents typhoid fever', 'ALL'),\n" +
                         " ('MMR 1', 0, 9, 0,'The MMR vaccine is a vaccine against Measles, Mumps, and Rubella (German measles)', 'ALL'),\n" +
                         " ('Hepatitis A-1', 1, 0, 0,'Hepatitis A vaccine is a vaccine that prevents Hepatitis A', 'ALL'),\n" +
                         " ('PCV Booster', 1, 0, 0,'Pneumococcal conjugate vaccine is a pneumococcal vaccine and a conjugate vaccine used to protect infants, young children, and adults against disease caused by the bacterium Streptococcus pneumoniae (pneumococcus)', 'ALL'),\n" +
@@ -109,13 +109,13 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                         " ('IPV', 1, 4, 0,'Inactivated Polio Vaccine', 'ALL'),\n" +
                         " ('Hepatitis A-2', 1, 6, 0,'Hepatitis A vaccine is a vaccine that prevents Hepatitis A', 'ALL'),\n" +
                         " ('Varicella 2', 1, 6, 0,'Varicella vaccine, also known as Chickenpox vaccine, is a vaccine that protects against Chickenpox', 'ALL'),\n" +
-                        " ('Annual Influenza Vaccine', 2, 0, 0,'Annual Influenza Vaccine', 'ALL'),\n" +
-                        " ('Annual Influenza Vaccine', 3, 0, 0,'Annual Influenza Vaccine', 'ALL'),\n" +
+                        " ('Annual Influenza', 2, 0, 0,'Annual Influenza Vaccine', 'ALL'),\n" +
+                        " ('Annual Influenza', 3, 0, 0,'Annual Influenza Vaccine', 'ALL'),\n" +
                         " ('DTwP /DTaP', 4, 0, 0,'A class of combination vaccines against three infectious diseases: Diphtheria, Pertussis (whooping cough), and Tetanus', 'ALL'),\n" +
                         " ('IPV', 4, 0, 0,'Inactivated Polio Vaccine', 'ALL'),\n" +
                         " ('MMR 3', 4, 0, 0,'The MMR vaccine is a vaccine against Measles, Mumps, and Rubella (German measles)', 'ALL'),\n" +
-                        " ('Annual Influenza Vaccine', 4, 0, 0,'Annual Influenza Vaccine', 'ALL'),\n" +
-                        " ('Annual Influenza Vaccine', 5, 0, 0,'Annual Influenza Vaccine', 'ALL'),\n" +
+                        " ('Annual Influenza', 4, 0, 0,'Annual Influenza Vaccine', 'ALL'),\n" +
+                        " ('Annual Influenza', 5, 0, 0,'Annual Influenza Vaccine', 'ALL'),\n" +
                         " ('HPV 1 for Girls', 9, 0, 0,'Human Papillomavirus (HPV) vaccines are vaccines that prevent infection by certain types of human papillomavirus (HPV)', 'F'),\n" +
                         " ('HPV 2 for Girls', 9, 9, 0,'Human Papillomavirus (HPV) vaccines are vaccines that prevent infection by certain types of human papillomavirus (HPV)', 'F'),\n" +
                         " ('Tdap/ Td', 10, 0, 0,'Tetanus and adult diphtheria (Td) vaccine is a combination of tetanus and diphtheria with lower concentration of diphtheria antigen (d) as recommended for older children and adults', 'ALL'),\n" +
@@ -451,28 +451,32 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         String[] columns = {"vaccine_fk, vac_taken_date", "reminder_date_year", "reminder_date_month", "reminder_date_day"};
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor vaccine_cursor = db.query("vaccine_records", columns, "recipient_fk=?", new String[]{String.valueOf(pk)}, null, null, "vaccine_fk");
+        Cursor vaccine_cursor = db.query("vaccine_records", columns, "recipient_fk=?", new String[]{String.valueOf(pk)}, null, null, "record_pk");
 
         if (vaccine_cursor.moveToFirst()) {
             do {
                 String details = getDetails(vaccine_cursor.getInt(0), db);
 
-                String dueOn;
-                if (vaccine_cursor.getString(4) != null) {
-                    LocalDate rec_dob = LocalDate.of(Integer.parseInt(vaccine_cursor.getString(2)), Integer.parseInt(vaccine_cursor.getString(3)), Integer.parseInt(vaccine_cursor.getString(4)));
-                    DateTimeFormatter mydateformat = DateTimeFormatter.ofPattern("d/MM/uuuu");
-                    dueOn = rec_dob.format(mydateformat);
-                } else {
-                    dueOn = getRecDob(pk, db);
+                LocalDate today = LocalDate.now();
+
+                LocalDate rec_dob = LocalDate.of(Integer.parseInt(vaccine_cursor.getString(2)), Integer.parseInt(vaccine_cursor.getString(3)), Integer.parseInt(vaccine_cursor.getString(4)));
+                DateTimeFormatter mydateformat = DateTimeFormatter.ofPattern("d/MM/uuuu");
+                String dueOn = rec_dob.format(mydateformat);
+
+                boolean button_clickable = true;
+                if (rec_dob.isAfter(today)) {
+                    button_clickable = false;
                 }
-                VaccineModel vaccineModel = new VaccineModel(this.getVacName(vaccine_cursor.getInt(0), db), vaccine_cursor.getString(1), this.getAge(vaccine_cursor.getInt(0), db), vaccine_cursor.getInt(0), this.context, dueOn, details);
+
+                VaccineModel vaccineModel = new VaccineModel(this.getVacName(vaccine_cursor.getInt(0), db), vaccine_cursor.getString(1), this.getAge(vaccine_cursor.getInt(0), db), vaccine_cursor.getInt(0), this.context, dueOn, details, button_clickable);
                 vaccines.add(vaccineModel);
+
             } while (vaccine_cursor.moveToNext());
 
         } else {
             // would be empty though
             Log.d(TAG, "DEV getVaccineRecords: error!");
-            vaccines.add(new VaccineModel("Error", "Error", "error", -1, this.context, "error", "error"));
+            vaccines.add(new VaccineModel("Error", "Error", "error", -1, this.context, "error", "error", false));
             vaccine_cursor.close();
             db.close();
             return vaccines;

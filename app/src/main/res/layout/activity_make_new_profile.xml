@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
     tools:context=".MakeNewProfile">
 
     <com.google.android.material.textfield.TextInputLayout
@@ -27,6 +26,7 @@
             android:id="@+id/first_name_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:digits="qwertzuiopasdfghjklyxcvbnm QWERTZUIOPASDFGHJKLYXCVBNM"
             android:inputType="text" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -51,6 +51,7 @@
             android:id="@+id/last_name_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:digits="qwertzuiopasdfghjklyxcvbnm QWERTZUIOPASDFGHJKLYXCVBNM"
             android:inputType="text" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -96,7 +97,7 @@
         android:id="@+id/add_rec_btn"
         android:layout_width="140dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
+        android:layout_marginTop="16dp"
         android:alpha="200"
         android:background="@drawable/round_corner_about"
         android:text="@string/submit"
@@ -128,7 +129,6 @@
             android:layout_gravity="center_horizontal|left"
             android:checked="false"
             android:text="@string/male"
-            android:textColor="@color/gray"
             android:background="@drawable/custom_divider_gender_radio"
             android:textSize="18sp" />
 
@@ -138,10 +138,9 @@
             android:layout_width="wrap_content"
             android:layout_height="35dp"
             android:layout_gravity="center_horizontal|left"
+            android:background="@drawable/custom_divider_gender_radio"
             android:checked="false"
             android:text="@string/female"
-            android:background="@drawable/custom_divider_gender_radio"
-            android:textColor="@color/gray"
             android:textSize="18sp" />
 
         <RadioButton
@@ -153,7 +152,6 @@
             android:background="@drawable/custom_divider_gender_radio"
             android:checked="false"
             android:text="@string/other"
-            android:textColor="@color/gray"
             android:textSize="18sp" />
 
     </RadioGroup>

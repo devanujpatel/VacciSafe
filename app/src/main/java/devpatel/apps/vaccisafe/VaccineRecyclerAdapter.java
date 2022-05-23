@@ -35,6 +35,8 @@ public class VaccineRecyclerAdapter extends RecyclerView.Adapter<VaccineRecycler
 
     @Override
     public void onBindViewHolder(@NonNull VaccineRecyclerAdapter.MyViewHolder holder, int position) {
+        holder.setIsRecyclable(false);
+
         String vaccine_name = vaccines.get(position).getName();
         String taken_at = vaccines.get(position).getAge();
         Boolean mark_as = vaccines.get(position).getTaken();
@@ -45,12 +47,17 @@ public class VaccineRecyclerAdapter extends RecyclerView.Adapter<VaccineRecycler
 
         if (mark_as) {
             holder.mark_as_btn.setText("Taken");
-            //holder.dueOn.setText("-->");
             holder.mark_as_btn.setBackgroundColor(Color.parseColor("#4caf50"));
         } else {
             holder.mark_as_btn.setText(dueOn);
             holder.mark_as_btn.setBackgroundColor(Color.parseColor("#f97444"));
         }
+
+        if (!vaccines.get(position).get_button_clickable()) {
+            // disable button
+            holder.mark_as_btn.setEnabled(false);
+        }
+
     }
 
     @Override

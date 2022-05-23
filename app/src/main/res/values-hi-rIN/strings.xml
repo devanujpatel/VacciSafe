@@ -32,4 +32,5 @@
     <string name="provide_valid_name">" कृपया कोई मान्य नाम दें."</string>
     <string name="due_on_with_spaces">" - पर कारण: "</string>
     <string name="vaccisafe_reminder_for">"के लिए VacciSafe अनुस्मारक "</string>
+    <string name="taken">" लिया गया"</string>
 </resources>

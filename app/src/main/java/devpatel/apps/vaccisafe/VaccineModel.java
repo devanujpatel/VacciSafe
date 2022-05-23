@@ -10,12 +10,9 @@ public class VaccineModel {
     Context context;
     String dueOn;
     String details;
+    Boolean button_clickable;
 
-    public Context getContext() {
-        return context;
-    }
-
-    public VaccineModel(String name, String taken_at, String age, int id, Context context, String dueOn, String details) {
+    public VaccineModel(String name, String taken_at, String age, int id, Context context, String dueOn, String details, Boolean button_clickable) {
         this.name = name;
         this.id = id;
         this.taken_at = taken_at;
@@ -23,6 +20,15 @@ public class VaccineModel {
         this.context = context;
         this.dueOn = dueOn;
         this.details = details;
+        this.button_clickable = button_clickable;
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
+    public Boolean get_button_clickable() {
+        return button_clickable;
     }
 
     public String getAge() {

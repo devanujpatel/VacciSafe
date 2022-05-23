@@ -31,5 +31,7 @@
     <string name="provide_valid_name">Please provide a valid name</string>
     <string name="due_on_with_spaces">" - Due on: "</string>
     <string name="vaccisafe_reminder_for">"VacciSafe Reminder for "</string>
+    <string name="taken">Taken</string>
+    <string name="battery_optimization_instructions">Fill this. TODO</string>
 
 </resources>
