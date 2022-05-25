@@ -1,6 +1,5 @@
 package devpatel.apps.vaccisafe;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
@@ -22,8 +21,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-
-import static android.content.ContentValues.TAG;
 
 public class VaccineActivity extends AppCompatActivity {
 
@@ -60,7 +57,9 @@ public class VaccineActivity extends AppCompatActivity {
         ArrayList<VaccineModel> vaccines = db.getVaccineRecords(rec_pk);
         RecyclerView recyclerView = findViewById(R.id.vaccines_recycler_view);
         VaccineRecyclerAdapter adapter = new VaccineRecyclerAdapter(vaccines);
+        adapter.setHasStableIds(true);
         recyclerView.setHasFixedSize(true);
+        //recyclerView.setItemViewCacheSize(vaccines.size());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 

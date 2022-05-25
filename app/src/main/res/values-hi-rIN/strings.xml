@@ -34,7 +34,9 @@
     <string name="vaccisafe_reminder_for">"के लिए VacciSafe अनुस्मारक "</string>
     <string name="taken">" लिया गया"</string>
     <string name="share_this_app">इस एप को शेयर कीजिए</string>
-    <string name="open_battery_optimizations_page">बैटरी अनुकूलन पृष्ठ खोलें</string>
-    <string name="vaccisafe_notification">अधिसूचनाओं के संबंध में</string>
-    <string name="battery_optimization_instructions">नवीनतम Android दिशानिर्देशों के अनुसार, समय पर सूचनाएं प्राप्त करने के लिए आपको VacciSafe के लिए बैटरी अनुकूलन को अक्षम करना होगा। ऐसा करने के लिए: <br/> 1. नीचे दिए गए बटन पर क्लिक करें। यह आपको आवश्यक सेटिंग पृष्ठ पर ले जाएगा।<br/> (2) सभी ऐप्स पर क्लिक करें। डिफ़ॉल्ट रूप से \"अनुकूलित नहीं&quot; चुना गया है। उस पर टैप करें और इसे &quot;सभी ऐप्स&quot; में बदल दें। (यह स्क्रीन के शीर्ष पर कहीं होना चाहिए।) <br/> (3) VacciSafe पर खोजें और टैप करें (आप से खोजना शुरू कर सकते हैं नीचे क्योंकि सूची को वर्णानुक्रम में क्रमबद्ध किया गया है)<br/>(4)सुनिश्चित करें कि VacciSafe के लिए, &quot;अनुकूलित नहीं&quot; विकल्प चुना गया है।<br/> एक बार हो जाने के बाद, जब भी नियत तारीख नजदीक आएगी, आपको अपनी वैक्सीन सूचनाएं सुबह 9 बजे मिलना शुरू हो जाएंगी।</string>
+    <string name="open_battery_optimizations_page">ओपन बैटरी ऑप्टिमाइज़ेशन</string>
+    <string name="vaccisafe_notification">सूचनाएं सक्षम करें</string>
+    <string name="instructions_2">स्क्रीन के शीर्ष के पास, \'सभी ऐप्स\' पर क्लिक करें, VacciSafe तक नीचे स्क्रॉल करें, और बैटरी अनुकूलन को बंद करने के लिए नियंत्रण पर क्लिक करें।</string>
+    <string name="instructions_1">Android दिशानिर्देशों के अनुसार, सूचनाएं प्राप्त करने के लिए आपको VacciSafe के लिए बैटरी अनुकूलन को अक्षम करना होगा।</string>
+    <string name="instructions_3">एक बार हो जाने के बाद, आपको छूटे हुए/आगामी टीकों के लिए सुबह 9 बजे सूचनाएं प्राप्त होंगी।</string>
 </resources>

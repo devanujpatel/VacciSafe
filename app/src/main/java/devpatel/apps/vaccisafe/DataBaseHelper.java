@@ -21,10 +21,6 @@ import static android.content.ContentValues.TAG;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
     Context context;
-    int rec_pk;
-    int g_dob_year;
-    int g_dob_month;
-    int g_dob_day;
 
     public DataBaseHelper(@Nullable Context context) {
         super(context, "vaccisafe.db", null, 2);
@@ -35,7 +31,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         String createRecipientTableStatement = "CREATE TABLE recipients(\n" +
-                "\trecipient_pk INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
+                    "\trecipient_pk INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
                 "\tfirst_name TEXT NOT NULL,\n" +
                 "\tlast_name TEXT NOT NULL,\n" +
                 "\tyear_dob INT NOT NULL,\n" +
@@ -145,13 +141,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
             if (recipients_cursor.moveToFirst()) {
                 do {
-                    rec_pk = recipients_cursor.getInt(0);
-                    g_dob_year = recipients_cursor.getInt(3);
-                    g_dob_month = recipients_cursor.getInt(4);
-                    g_dob_day = recipients_cursor.getInt(5);
-
-                    add_vaccine_record_to_db(16, 0, 0, (int) vaccine_fk, sqLiteDatabase);
-
+                    add_vaccine_record_to_db(16, 0, 0, (int) vaccine_fk, sqLiteDatabase, recipients_cursor.getInt(0), recipients_cursor.getInt(3), recipients_cursor.getInt(4), recipients_cursor.getInt(5));
                 } while (recipients_cursor.moveToNext());
             } else {
                 Log.d(TAG, "DEV get_recipients: error");
@@ -163,10 +153,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public Object[] makeProfile(String first_name, String last_name, int dob_year, int dob_month, int day_dob, String gender) {
         Object[] return_values = new Object[2];
-
-        g_dob_year = dob_year;
-        g_dob_month = dob_month;
-        g_dob_day = day_dob;
 
         if (first_name.equals("") || last_name.equals("")) {
             return_values[0] = "empty name";
@@ -212,8 +198,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             return return_values;
         }
 
-        rec_pk = getRec(first_name, last_name, db);
-
         Cursor vaccine_cursor;
         // get all vaccines data
         if (gender.equals("Female")) {
@@ -226,7 +210,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         if (vaccine_cursor.moveToFirst()) {
             do {
-                add_vaccine_record_to_db(vaccine_cursor.getInt(2), vaccine_cursor.getInt(3), vaccine_cursor.getInt(4), vaccine_cursor.getInt(0), db);
+                add_vaccine_record_to_db(vaccine_cursor.getInt(2), vaccine_cursor.getInt(3), vaccine_cursor.getInt(4), vaccine_cursor.getInt(0), db, getRec(first_name, last_name, db), dob_year, dob_month, day_dob);
             } while (vaccine_cursor.moveToNext());
         }
         vaccine_cursor.close();
@@ -240,7 +224,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void add_vaccine_record_to_db(int vac_add_year, int vac_add_month, int vac_add_weeks, int vaccine_fk, SQLiteDatabase db) {
+    private void add_vaccine_record_to_db(int vac_add_year, int vac_add_month, int vac_add_weeks, int vaccine_fk, SQLiteDatabase db, int rec_pk, int g_dob_year, int g_dob_month, int g_dob_day) {
         // start with the dob and later add the required years, months and days
         LocalDate vaccine_date = LocalDate.of(g_dob_year, g_dob_month, g_dob_day);
 
@@ -331,14 +315,19 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return pk;
     }
 
-    public void setTakenAt(String taken_at, String vaccine_fk) {
+    public void setTakenAt(String taken_at, String vaccine_fk, String rec_fk) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put("vac_taken_date ", taken_at);
 
-        db.update("vaccine_records", values, String.format("%s = ?", "vaccine_fk"),
-                new String[]{vaccine_fk});
+        if (taken_at.equals("null")){
+            values.putNull("vac_taken_date");
+        } else{
+            values.put("vac_taken_date ", taken_at);
+        }
+
+        db.update("vaccine_records", values, "vaccine_fk=? AND recipient_fk=?",
+                new String[]{vaccine_fk, rec_fk});
         db.close();
     }
 
@@ -450,7 +439,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public ArrayList<VaccineModel> getVaccineRecords(int pk) {
         ArrayList<VaccineModel> vaccines = new ArrayList<>();
-        String[] columns = {"vaccine_fk, vac_taken_date", "reminder_date_year", "reminder_date_month", "reminder_date_day"};
+        String[] columns = {"vaccine_fk", "vac_taken_date", "reminder_date_year", "reminder_date_month", "reminder_date_day"};
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor vaccine_cursor = db.query("vaccine_records", columns, "recipient_fk=?", new String[]{String.valueOf(pk)}, null, null, "record_pk");
@@ -461,16 +450,16 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
                 LocalDate today = LocalDate.now();
 
-                LocalDate rec_dob = LocalDate.of(Integer.parseInt(vaccine_cursor.getString(2)), Integer.parseInt(vaccine_cursor.getString(3)), Integer.parseInt(vaccine_cursor.getString(4)));
+                LocalDate due_on_ld = LocalDate.of(Integer.parseInt(vaccine_cursor.getString(2)), Integer.parseInt(vaccine_cursor.getString(3)), Integer.parseInt(vaccine_cursor.getString(4)));
                 DateTimeFormatter mydateformat = DateTimeFormatter.ofPattern("d/MM/uuuu");
-                String dueOn = rec_dob.format(mydateformat);
+                String dueOn = due_on_ld.format(mydateformat);
 
                 boolean button_clickable = true;
-                if (rec_dob.isAfter(today)) {
+                if (due_on_ld.isAfter(today)) {
                     button_clickable = false;
                 }
 
-                VaccineModel vaccineModel = new VaccineModel(this.getVacName(vaccine_cursor.getInt(0), db), vaccine_cursor.getString(1), this.getAge(vaccine_cursor.getInt(0), db), vaccine_cursor.getInt(0), this.context, dueOn, details, button_clickable);
+                VaccineModel vaccineModel = new VaccineModel(this.getVacName(vaccine_cursor.getInt(0), db), vaccine_cursor.getString(1), this.getAge(vaccine_cursor.getInt(0), db), vaccine_cursor.getInt(0), this.context, dueOn, details, button_clickable, pk);
                 vaccines.add(vaccineModel);
 
             } while (vaccine_cursor.moveToNext());
@@ -478,7 +467,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         } else {
             // would be empty though
             Log.d(TAG, "DEV getVaccineRecords: error!");
-            vaccines.add(new VaccineModel("Error", "Error", "error", -1, this.context, "error", "error", false));
+            vaccines.add(new VaccineModel("Error", "Error", "error", -1, this.context, "error", "error", false, 0));
             vaccine_cursor.close();
             db.close();
             return vaccines;

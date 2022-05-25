@@ -3,7 +3,6 @@ package devpatel.apps.vaccisafe;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -25,16 +24,12 @@ public class AlertReceiver extends BroadcastReceiver {
 
     private void makeNotification(String title, String content, int value, Context my_this) {
 
-        Intent click_intent = new Intent(my_this, VaccineActivity.class);
-        PendingIntent click_pd_intent = PendingIntent.getActivity(my_this, 2, click_intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
         Notification notification = new NotificationCompat.Builder(my_this, "VacciSafe Notification Channel")
                 .setSmallIcon(R.drawable.logo)
                 .setContentTitle(title)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(content))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)
-                .setContentIntent(click_pd_intent)
                 .setAutoCancel(true)
                 .build();
 
@@ -76,5 +71,4 @@ public class AlertReceiver extends BroadcastReceiver {
             makeNotification(my_this.getString(R.string.vaccisafe_reminder_for) + rec_to_name.get(value), rec_to_rem.get(value), value, my_this);
         }
     }
-
 }

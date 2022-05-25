@@ -2,6 +2,7 @@ package devpatel.apps.vaccisafe;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +21,8 @@ import java.util.Date;
 
 public class VaccineRecyclerAdapter extends RecyclerView.Adapter<VaccineRecyclerAdapter.MyViewHolder> {
 
+    VaccineRecyclerAdapter my_adapter;
     private ArrayList<VaccineModel> vaccines;
-
     public VaccineRecyclerAdapter(ArrayList<VaccineModel> vaccines) {
         this.vaccines = vaccines;
     }
@@ -36,14 +37,17 @@ public class VaccineRecyclerAdapter extends RecyclerView.Adapter<VaccineRecycler
     @Override
     public void onBindViewHolder(@NonNull VaccineRecyclerAdapter.MyViewHolder holder, int position) {
         holder.setIsRecyclable(false);
-
         String vaccine_name = vaccines.get(position).getName();
-        String taken_at = vaccines.get(position).getAge();
+        String taken_at_recommended_age = vaccines.get(position).getAge();
         Boolean mark_as = vaccines.get(position).getTaken();
         String dueOn = vaccines.get(position).getDueOn();
 
+        if (vaccine_name.equals("OPV")) {
+            Log.d("DEV", "onBindViewHolder: OPV on bind view holder " + mark_as + " " + vaccines.get(position).getTaken());
+        }
+
         holder.vaccine_name_txt.setText(vaccine_name);
-        holder.takenAt.setText(taken_at);
+        holder.takenAt.setText(taken_at_recommended_age);
 
         if (mark_as) {
             holder.mark_as_btn.setText("Taken");
@@ -94,20 +98,17 @@ public class VaccineRecyclerAdapter extends RecyclerView.Adapter<VaccineRecycler
                 @Override
                 public void onClick(View view) {
                     int index = getAbsoluteAdapterPosition();
-                    VaccineModel vaccine_obj = vaccines.get(index);
 
                     if (mark_as_btn.getText().equals("Taken")) {
-                        mark_as_btn.setText(vaccine_obj.getDueOn());
-                        vaccine_obj.setTaken_at(null);
-                        //vaccines.get(getAbsoluteAdapterPosition()).setTaken_at(null);
+                        mark_as_btn.setText(vaccines.get(index).getDueOn());
+                        vaccines.get(index).setTaken_at("null");
                         mark_as_btn.setBackgroundColor(Color.parseColor("#f97444"));
-                        //dueOn.setText(vaccines.get(getAbsoluteAdapterPosition()).getDueOn());
                     } else {
                         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                         Calendar cal = Calendar.getInstance();
                         Date date = cal.getTime();
                         String todaysdate = dateFormat.format(date);
-                        vaccine_obj.setTaken_at(todaysdate);
+                        vaccines.get(index).setTaken_at(todaysdate);
 
                         mark_as_btn.setText("Taken");
                         mark_as_btn.setBackgroundColor(Color.parseColor("#4caf50"));
@@ -119,7 +120,6 @@ public class VaccineRecyclerAdapter extends RecyclerView.Adapter<VaccineRecycler
     }
 
     public void show_details_bottomsheet(int index){
-
         VaccineModel vaccine_obj = vaccines.get(index);
         Bundle bundle = new Bundle();
         bundle.putString("vaccine_name", vaccine_obj.getDisplayName());

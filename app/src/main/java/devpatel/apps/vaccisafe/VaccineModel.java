@@ -3,7 +3,7 @@ package devpatel.apps.vaccisafe;
 import android.content.Context;
 
 public class VaccineModel {
-    int id;
+    int id, rec_pk;
     String name;
     String displayName;
     String taken_at, age;
@@ -12,7 +12,7 @@ public class VaccineModel {
     String details;
     Boolean button_clickable;
 
-    public VaccineModel(String name, String taken_at, String age, int id, Context context, String dueOn, String details, Boolean button_clickable) {
+    public VaccineModel(String name, String taken_at, String age, int id, Context context, String dueOn, String details, Boolean button_clickable, int rec_pk) {
         this.name = name;
         this.id = id;
         this.taken_at = taken_at;
@@ -21,6 +21,7 @@ public class VaccineModel {
         this.dueOn = dueOn;
         this.details = details;
         this.button_clickable = button_clickable;
+        this.rec_pk = rec_pk;
     }
 
     public Context getContext() {
@@ -41,10 +42,6 @@ public class VaccineModel {
 
     public String getDueOn() {
         return dueOn;
-    }
-
-    public void setDueOn(String dueOn) {
-        this.dueOn = dueOn;
     }
 
     public String getDisplayName() {
@@ -70,7 +67,7 @@ public class VaccineModel {
 
     public void setTaken_at(String taken_at) {
         DataBaseHelper db = new DataBaseHelper(this.context);
-        db.setTakenAt(taken_at, String.valueOf(this.id));
+        db.setTakenAt(taken_at, String.valueOf(this.id), String.valueOf(this.rec_pk));
         this.taken_at = taken_at;
     }
 

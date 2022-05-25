@@ -66,9 +66,7 @@ public class ProfileActivity extends AppCompatActivity {
                 dialog.setContentView(R.layout.custom_about_dialog);
                 dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 dialog.setCancelable(false); //Optional
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.round_corner));
-                }
+                dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.round_corner));
                 dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation; //Setting the animations to dialog
 
                 TextView Okay = dialog.findViewById(R.id.btn_okay);
