@@ -3,15 +3,14 @@ plugins {
 }
 
 android {
-    compileSdkVersion 33
-    buildToolsVersion "32.0.0"
+    compileSdkVersion 35
 
     defaultConfig {
         applicationId "devpatel.apps.vaccisafe"
         minSdkVersion 26
-        targetSdkVersion 33
-        versionCode 8
-        versionName "5"
+        targetSdkVersion 35
+        versionCode 9
+        versionName "6"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -26,28 +25,34 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    buildFeatures {
+        buildConfig true
+    }
+
+
     namespace 'devpatel.apps.vaccisafe'
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.4.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
-    implementation 'joda-time:joda-time:2.9.4'
-    testImplementation 'junit:junit:4.+'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
+    implementation 'joda-time:joda-time:2.12.7'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
     // cardview dependency
     implementation "androidx.cardview:cardview:1.0.0"
-    implementation "com.google.android.material:material:1.6.0"
+    implementation "com.google.android.material:material:1.12.0"
     // to show tabular data
-    implementation 'com.evrencoskun.library:tableview:0.8.9.4'
-    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+//    implementation 'com.evrencoskun.library:tableview:0.8.9.4'
+    implementation 'androidx.recyclerview:recyclerview:1.4.0'
 
     // to make table rows clickable
-    implementation 'de.codecrafters.tableview:tableview:2.2.0'
+    implementation 'de.codecrafters.tableview:tableview:2.8.0'
 
     // for notification
-    implementation "androidx.core:core:1.7.0"
+    implementation "androidx.core:core:1.16.0"
 
     // for rate us feature
     implementation 'com.github.hotchemi:android-rate:1.0.1'
