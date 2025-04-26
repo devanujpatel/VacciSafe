@@ -9,8 +9,8 @@ android {
         applicationId "devpatel.apps.vaccisafe"
         minSdkVersion 26
         targetSdkVersion 35
-        versionCode 9
-        versionName "6"
+        versionCode 10
+        versionName "7"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -26,9 +26,9 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    buildFeatures {
-        buildConfig true
-    }
+//    buildFeatures {
+//        buildConfig true
+//    }
 
 
     namespace 'devpatel.apps.vaccisafe'
@@ -49,7 +49,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.4.0'
 
     // to make table rows clickable
-    implementation 'de.codecrafters.tableview:tableview:2.8.0'
+//    implementation 'de.codecrafters.tableview:tableview:2.8.0'
 
     // for notification
     implementation "androidx.core:core:1.16.0"
